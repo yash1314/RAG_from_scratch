@@ -43,8 +43,6 @@ with st.sidebar:
         else:
             st.error('Upload PDF file before submitting.')
         
-        # loading text to text model for casual talking 
-    Model.load_t2t_model()
 
 
 # initializing chat history 

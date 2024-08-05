@@ -18,15 +18,15 @@ class Model:
             print(f"Error in loading summary model: {str(e)}")
 
 
-    @staticmethod
-    @st.cache_resource(show_spinner=False)
-    def load_t2t_model():
-        try:
-            model_name = "google/flan-t5-base"
-            pipe = pipeline("text2text-generation", model= model_name)
-            return pipe
-        except Exception as e:
-            print(f"Error in loading text-to-text model: {str(e)}")
+    # @staticmethod
+    # @st.cache_resource(show_spinner=False)
+    # def load_t2t_model():
+    #     try:
+    #         model_name = "google/flan-t5-base"
+    #         pipe = pipeline("text2text-generation", model= model_name)
+    #         return pipe
+    #     except Exception as e:
+    #         print(f"Error in loading text-to-text model: {str(e)}")
     
 
     @staticmethod
