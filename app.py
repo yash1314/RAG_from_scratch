@@ -58,8 +58,9 @@ if not user_file: # if user doen't upload any file then the model talks casually
             st.markdown(prompt)
             
         with st.chat_message("assistant"):
-            res = casual_responses(prompt)
-            response = st.write_stream(res)
+            with st.spinner("Generating.."):
+                res = casual_responses(prompt)
+                response = st.write_stream(res)
    
         st.session_state.messages.append({"role": "assistant", "content": response})
 
