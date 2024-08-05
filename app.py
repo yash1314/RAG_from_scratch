@@ -1,5 +1,4 @@
 import streamlit as st 
-import hydralit_components as hc
 from utils import output_stream, initialize_messages, casual_responses
 import time
 
