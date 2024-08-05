@@ -1,0 +1,7 @@
+pandas                                           
+numpy                                          
+streamlit                                                                                  
+scikit-learn                                    
+sentence_transformers
+transformers
+better-profanity
