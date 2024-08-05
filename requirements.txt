@@ -5,3 +5,4 @@ scikit-learn
 sentence_transformers
 transformers
 better-profanity
+pymupdf
