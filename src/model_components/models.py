@@ -59,16 +59,22 @@ class Model:
     #     except Exception as e:
     #         print(f"Error in generating text-to-text model output from Model class: {str(e)}")
 
-    
     @staticmethod
     @st.cache_resource(show_spinner=False)
+    def load_t2t_model():
+        try:
+            pipe = pipeline("text-generation", model="Qwen/Qwen2-0.5B-Instruct")
+            return pipe
+        except Exception as e:
+            print(f"Error in loading text-to-text model: {str(e)}")
+        
+    @staticmethod
     def QA_model(u_input):
         try:
             messages = [{"role": "system", "content": "You are a sarcastic assistant."},
                         {"role": "user", "content": u_input}]
             
-            pipe = pipeline("text-generation", model="Qwen/Qwen2-0.5B-Instruct")
-            output = pipe(messages, max_new_tokens = 200)
+            output = Model.load_t2t_model()(messages, max_new_tokens = 200)
             return output[0]['generated_text'][2]['content']
         
         except Exception as e:

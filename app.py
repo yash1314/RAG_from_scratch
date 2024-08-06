@@ -42,6 +42,8 @@ with st.sidebar:
             Model.embed_model()
         else:
             st.error('Upload PDF file before submitting.')
+    
+    Model.load_t2t_model()
         
 
 
