@@ -8,6 +8,7 @@ from better_profanity import profanity
 
 # streaming output
 def output_stream(output):
+    """Output answer in stream of words."""
     try: 
         for word in output.split(" "):
             yield word + " "
@@ -19,7 +20,8 @@ def output_stream(output):
 
 # generate casual response when app initialize with and without file
 def casual_responses(sentence):
-    """The function generates responses based on the prompt sentiment and wording."""
+    """The function generates responses based on the prompt sentiment and wording. It also restricts user and model response
+    if found inappropriate."""
 
     if profanity.contains_profanity(sentence): 
         filtered_response = random.choice(
@@ -62,5 +64,6 @@ def reg_x(text):
 
 # deleting embedded data when user file changes
 def clear_session_embedded_data():
+    """Clear document embedding data"""
     if "embedded_data" in st.session_state:
         del st.session_state["embedded_data"]

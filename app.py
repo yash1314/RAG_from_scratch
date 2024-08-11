@@ -26,10 +26,9 @@ st.write("Made ❤️ by **Yash Keshari**")
 
 # User Input with data extration, transformation and saving the data.
 with st.sidebar:
-    st.header('File Section', divider=True)
+    st.header('File Section', divider=True)    
     
     with st.form("File_handling"):                
-
         user_file = st.file_uploader(label=':blue[**Upload your PDF file!**]',
                                             type= 'pdf', accept_multiple_files=False)
 
