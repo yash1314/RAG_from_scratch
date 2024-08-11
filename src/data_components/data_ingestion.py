@@ -1,4 +1,4 @@
-import os, logging
+import os, logging, shutil
 import streamlit as st
 
 
@@ -43,24 +43,14 @@ class DataFile:
 
 
     @staticmethod
-    def remove_file(file:str = None, folder_name:str = None):
+    def remove_file(folder_name:str = None):
         """
         Remove/delete file from the system
         """
         try:             
-            if file:
-                file_path = os.path.join(folder_name, file)
-
-                if os.path.exists(file_path):
-                    os.rmdir(file_path)
-                    print(f"File {file} successfully removed.")
-            
-            else:
-                if os.path.exists(folder_name):
-                    os.rmdir(folder_name)
-                    print(f"Folder {folder_name} successfully removed.")
-                else:
-                    print(f"Folder {folder_name} is not present.")
+            if os.path.isdir(folder_name):
+                shutil.rmtree(folder_name)
+                print(f"File {folder_name} successfully removed.")
                 
         except:
-            print(f"Problem with the {file} or its path.")
+            print(f"Problem with the {folder_name} or its path.")

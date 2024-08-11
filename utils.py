@@ -17,24 +17,31 @@ def output_stream(output):
             print(f"Error in output_stream: {str(e)}")  
 
 
-# generate casual response when app initialize without file
+# generate casual response when app initialize with and without file
 def casual_responses(sentence):
     """The function generates responses based on the prompt sentiment and wording."""
 
     if profanity.contains_profanity(sentence): 
-        response = random.choice(
+        filtered_response = random.choice(
         ["Sorry, I cannot help you with that!",
-         "I'm here to assist you. If you have any concerns or issues, please let me know, and I'll do my best to address them.",
-         "I cannot help you with that. Please, Let me know how I can assist."])
+        "I'm here to assist you. If you have any concerns or issues, please let me know, and I'll do my best to address them.",
+        "I cannot help you with that. Please, Let me know how I can assist."])
         
-        for word in response.split():
+        for word in filtered_response.split():
             yield word + " "
-            time.sleep(0.03)
+            time.sleep(0.05)
+
     else:
-        qa_model = Model.QA_model(u_input = sentence)
-        for word in qa_model.split():
-            yield word + " "
-            time.sleep(0.04)
+        qa_model_output = Model.QA_model(u_input = sentence)
+        if profanity.contains_profanity(qa_model_output):
+            filtered_output = "Inappropriate output, therefore restricting the answer. Ask another question !"
+            for word in filtered_output.split():
+                yield word + " "
+                time.sleep(0.05)
+        else:
+            for word in qa_model_output.split():
+                yield word + " "
+                time.sleep(0.05)
 
 
 # initialize chat history in streamlit
@@ -47,20 +54,13 @@ def initialize_messages():
             st.markdown(message["content"])
 
 
-# function to delete files
-def delete_files():
-    try:
-        DataFile.remove_file(folder_name='artifact')
-        
-    except Exception as e:
-        print(f"Error in artifact folder deletion: {str(e)}")
-
-
 # regular expression function
 def reg_x(text):
     pattern = r"\n|--|#|\||`|\*\*(?=\w+)|(?<=\w)+\*\*|\s{2,}|\.+"
     return re.sub(pattern, "", text)      
 
+
 # deleting embedded data when user file changes
-def clear_cache_session_data(keys):
-    st.session_state.pop(keys)
+def clear_session_embedded_data():
+    if "embedded_data" in st.session_state:
+        del st.session_state["embedded_data"]

@@ -18,15 +18,15 @@ class Model:
             print(f"Error in loading summary model: {str(e)}")
 
 
-    # @staticmethod
-    # @st.cache_resource(show_spinner=False)
-    # def load_t2t_model():
-    #     try:
-    #         model_name = "google/flan-t5-base"
-    #         pipe = pipeline("text2text-generation", model= model_name)
-    #         return pipe
-    #     except Exception as e:
-    #         print(f"Error in loading text-to-text model: {str(e)}")
+    @staticmethod
+    @st.cache_resource(show_spinner=False)
+    def load_t2t_model():
+        try:
+            model_name = "google/flan-t5-base"
+            pipe = pipeline("text2text-generation", model= model_name)
+            return pipe
+        except Exception as e:
+            print(f"Error in loading text-to-text model: {str(e)}")
     
 
     @staticmethod
@@ -50,35 +50,32 @@ class Model:
             print(f"Error in generating summary model output from Model class: {str(e)}")
     
 
-    # @staticmethod
-    # def QA_model(u_input):
-    #     try: 
-    #         qa_prompt = f"""You are an assistant bot. Answer my questions briefly.\nQuestion: {u_input}"""  
-    #         output = Model.load_t2t_model()(qa_prompt, max_new_tokens = 384) 
-    #         return output[0]['generated_text']
-    #     except Exception as e:
-    #         print(f"Error in generating text-to-text model output from Model class: {str(e)}")
-
-    @staticmethod
-    @st.cache_resource(show_spinner=False)
-    def load_t2t_model():
-        try:
-            pipe = pipeline("text-generation", model="Qwen/Qwen2-0.5B-Instruct")
-            return pipe
-        except Exception as e:
-            print(f"Error in loading text-to-text model: {str(e)}")
-        
     @staticmethod
     def QA_model(u_input):
-        try:
-            messages = [{"role": "system", "content": "You are a sarcastic assistant."},
-                        {"role": "user", "content": u_input}]
-            
-            output = Model.load_t2t_model()(messages, max_new_tokens = 200)
-            return output[0]['generated_text'][2]['content']
-        
+        try: 
+            qa_prompt = f"Question: {u_input} \nAnswer: \n"  
+            output = Model.load_t2t_model()(qa_prompt, max_new_tokens = 384) 
+            return output[0]['generated_text']
         except Exception as e:
             print(f"Error in generating text-to-text model output from Model class: {str(e)}")
 
-
-    
+    # @staticmethod
+    # @st.cache_resource(show_spinner=False)
+    # def load_t2t_model():
+    #     try:
+    #         pipe = pipeline("text-generation", model="Qwen/Qwen2-0.5B-Instruct")
+    #         return pipe
+    #     except Exception as e:
+    #         print(f"Error in loading text-to-text model: {str(e)}")
+        
+    # @staticmethod
+    # def QA_model(u_input):
+    #     try:
+    #         messages = [{"role": "system", "content": "You are a chat assistant made by Yash Keshari and LLM engineer."},
+    #                     {"role": "user", "content": u_input}]
+            
+    #         output = Model.load_t2t_model()(messages, max_new_tokens = 200)
+    #         return output[0]['generated_text'][2]['content']
+        
+    #     except Exception as e:
+    #         print(f"Error in generating text-to-text model output from Model class: {str(e)}")    

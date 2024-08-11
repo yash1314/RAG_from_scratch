@@ -1,8 +1,9 @@
 import streamlit as st 
-from utils import output_stream, initialize_messages, casual_responses
 import time
+from utils import output_stream, initialize_messages, casual_responses, clear_session_embedded_data
 
 from src.pipelines.main_pipe import file_handling
+from src.data_components.data_ingestion import DataFile
 from src.data_components.data_similarity_search import Similarity_Search
 from src.model_components.models import Model
 
@@ -25,34 +26,46 @@ st.write("Made ❤️ by **Yash Keshari**")
 
 # User Input with data extration, transformation and saving the data.
 with st.sidebar:
-    st.header('File Section :')
-    user_file = st.file_uploader(label=':blue[**Upload your PDF file!**]',
+    st.header('File Section', divider=True)
+    
+    with st.form("File_handling"):                
+
+        user_file = st.file_uploader(label=':blue[**Upload your PDF file!**]',
                                             type= 'pdf', accept_multiple_files=False)
-    
-    if st.button(label = "Submit File"):
-        if user_file:   
-            with st.spinner('Loading and transforming Data.'):
-                time.sleep(1)
-                file_handling(file = user_file)
-                time.sleep(1)
-            st.success('File transformed successfully!', icon="✅")
-            
-            # loading models beforehand if user submit file
-            Model.load_summary_model()
-            Model.embed_model()
-        else:
-            st.error('Upload PDF file before submitting.')
-    
+
+        submit = st.form_submit_button("Submit", use_container_width=True)
+        if submit:
+            # File saving and transformation
+            if user_file:   
+                with st.spinner('Loading and transforming Data.'):
+                    time.sleep(1)
+                    file_handling(file = user_file)
+                    time.sleep(1)
+                st.success('File transformed successfully!', icon="✅")
+                
+                # loading models beforehand if user submit file
+                Model.load_summary_model()
+                Model.embed_model()
+            else:
+                st.error('Upload PDF file before submitting.')
+
+        delete = st.form_submit_button('Delete file')
+        if delete:
+            if user_file:
+                DataFile.remove_file(folder_name = 'artifact')
+                st.success(f"File {user_file.name} deleted successfully")
+            else:
+                st.error('Upload PDF file before deleting.')
+
     Model.load_t2t_model()
         
-
 
 # initializing chat history 
 initialize_messages()
 
 
 # Chat elements 
-if not user_file: # if user doen't upload any file then the model talks casually.
+if not user_file:       #If user doen't upload any file then the model talks casually.
     if prompt := st.chat_input("Talk to your PDF"):
         
         st.session_state.messages.append({"role": "user", "content": prompt})
@@ -62,13 +75,13 @@ if not user_file: # if user doen't upload any file then the model talks casually
         with st.chat_message("assistant"):
             with st.spinner("Generating.."):
                 res = casual_responses(prompt)
-                response = st.write_stream(res)
+                response = st.write(res)
    
         st.session_state.messages.append({"role": "assistant", "content": response})
 
 
 else:
-    if prompt := st.chat_input("Talk to your PDF"): # when user uploads pdf file, then the bot can only be used for QA task
+    if prompt := st.chat_input("Talk to your PDF"):     #When user uploads pdf file, then the bot can only be used for QA task
 
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
