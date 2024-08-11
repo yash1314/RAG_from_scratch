@@ -43,7 +43,7 @@ with st.sidebar:
                 st.success('File transformed successfully!', icon="✅")
                 
                 # loading models beforehand if user submit file
-                Model.load_summary_model()
+                # Model.load_summary_model()
                 Model.embed_model()
             else:
                 st.error('Upload PDF file before submitting.')
@@ -60,7 +60,6 @@ with st.sidebar:
         
 
 # initializing chat history 
-
 if "messages" not in st.session_state:
         st.session_state.messages = []
 
@@ -77,9 +76,10 @@ if not user_file:       #If user doen't upload any file then the model talks cas
             st.markdown(prompt)
             
         with st.chat_message("assistant"):
-            res = casual_responses(prompt)
-            response = st.write_stream(res)
-            print(response)
+            with st.spinner(" "):
+                res = casual_responses(prompt)
+                time.sleep(2)
+                response = st.write_stream(res)
    
         st.session_state.messages.append({"role": "assistant", "content": response})
 
@@ -91,13 +91,15 @@ else:
             st.markdown(prompt)
 
         with st.chat_message("assistant"):
-            with st.spinner('Generating..'):
+            with st.spinner(" "):
                 simm_data = Similarity_Search.similarity_compute(user_query=prompt, file_read_path="artifact/data/ext_data.csv")
                 if simm_data == None:
                     res = casual_responses(prompt)
+                    time.sleep(2)
                     response = st.write_stream(res)
                 else:
-                    final_output = Model.summary_model(query = prompt, context = simm_data)
+                    # final_output = Model.summary_model(query = prompt, context = simm_data)
+                    final_output = Model.QA_model(u_input = prompt, type = "qa", context=simm_data)
                     response = st.write_stream(output_stream(final_output))
 
                     with st.expander("Click to see context data from PDF"):
