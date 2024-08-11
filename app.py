@@ -43,7 +43,6 @@ with st.sidebar:
                 st.success('File transformed successfully!', icon="✅")
                 
                 # loading models beforehand if user submit file
-                # Model.load_summary_model()
                 Model.embed_model()
             else:
                 st.error('Upload PDF file before submitting.')
@@ -56,6 +55,7 @@ with st.sidebar:
             else:
                 st.error('Upload PDF file before deleting.')
 
+    # loading text2text model
     Model.load_t2t_model()
         
 
