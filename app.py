@@ -1,6 +1,6 @@
 import streamlit as st 
 import time
-from utils import output_stream, initialize_messages, casual_responses, clear_session_embedded_data
+from utils import output_stream, casual_responses, clear_session_embedded_data
 
 from src.pipelines.main_pipe import file_handling
 from src.data_components.data_ingestion import DataFile
@@ -60,8 +60,13 @@ with st.sidebar:
         
 
 # initializing chat history 
-initialize_messages()
 
+if "messages" not in st.session_state:
+        st.session_state.messages = []
+
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
 # Chat elements 
 if not user_file:       #If user doen't upload any file then the model talks casually.
@@ -72,12 +77,11 @@ if not user_file:       #If user doen't upload any file then the model talks cas
             st.markdown(prompt)
             
         with st.chat_message("assistant"):
-            # with st.spinner("Generating.."):
             res = casual_responses(prompt)
-            response = st.write(res)
+            response = st.write_stream(res)
+            print(response)
    
         st.session_state.messages.append({"role": "assistant", "content": response})
-
 
 else:
     if prompt := st.chat_input("Talk to your PDF"):     #When user uploads pdf file, then the bot can only be used for QA task

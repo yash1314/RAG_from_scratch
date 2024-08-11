@@ -12,7 +12,7 @@ def output_stream(output):
     try: 
         for word in output.split(" "):
             yield word + " "
-            time.sleep(0.03)
+            time.sleep(0.05)
             
     except Exception as e:
             print(f"Error in output_stream: {str(e)}")  
@@ -29,31 +29,23 @@ def casual_responses(sentence):
         "I'm here to assist you. If you have any concerns or issues, please let me know, and I'll do my best to address them.",
         "I cannot help you with that. Please, Let me know how I can assist."])
         
-        for word in filtered_response.split():
-            yield word + " "
-            time.sleep(0.05)
-
+        for word in filtered_response.split(" "):
+                yield word + " "
+                time.sleep(0.05)
+        
     else:
         qa_model_output = Model.QA_model(u_input = sentence)
+
         if profanity.contains_profanity(qa_model_output):
             filtered_output = "Inappropriate output, therefore restricting the answer. Ask another question !"
-            for word in filtered_output.split():
+            for word in filtered_output.split(" "):
                 yield word + " "
                 time.sleep(0.05)
+
         else:
-            for word in qa_model_output.split():
+            for word in qa_model_output.split(" "):
                 yield word + " "
                 time.sleep(0.05)
-
-
-# initialize chat history in streamlit
-def initialize_messages():
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
-
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
 
 
 # regular expression function
