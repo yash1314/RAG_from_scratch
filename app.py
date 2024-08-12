@@ -19,7 +19,7 @@ with open ('design.css') as source:
 st.markdown('<style>div.block-container{padding-top:0.2rem;}</style>', unsafe_allow_html=True)
 st.header(":orange[*Your Document, Your Chat* !]")
 
-st.markdown("""**> I appreciate and welcome your engagement with this application! Upload your PDF, ask a question, and get summaries based on 
+st.markdown("""**> I appreciate and welcome your engagement with this application! Upload your PDF using the side section (arrow on top left), ask a question, and get summaries based on 
                               your query. Also keep in mind that it may contain some redundancies. So please use with caution. :rainbow[Enjoy exploring!]**""")
 st.write("Made ❤️ by **Yash Keshari**")
 
