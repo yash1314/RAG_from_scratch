@@ -30,11 +30,13 @@ class Model:
     def QA_model(u_input, type, context:str = None):
         try:
             if type=="qa":
-                messages = [{"role": "system", "content": "You are helpful and polite assistant."},
+                messages = [{"role": "system", "content": """You are helpful and polite assistant.Below is an instruction that 
+                                                    describes a task. Write a response that appropriately completes the request."""},
                             {"role": "user", "content": u_input}]
                 
                 output = Model.load_t2t_model()(messages, max_new_tokens = 384)
                 return output[0]['generated_text'][2]['content']
+            
             
             elif type=='summary':
                 messages = [{"role": "system", "content": "You are pdf summary bot."},
