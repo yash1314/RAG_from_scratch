@@ -38,7 +38,7 @@ class Model:
                                                 Use only the following pieces of context to answer the question at the end."""},
                             {"role": "user", "content": u_input}]
                 
-                output = Model.load_t2t_model()(messages, max_new_tokens = 384)
+                output = Model.load_t2t_model()(messages, max_new_tokens = 256)
                 return output[0]['generated_text'][2]['content']
             
             
@@ -52,7 +52,7 @@ class Model:
 
                             Summarize the context based on the query, focusing on relevant details and key points."""}]
                 
-                output = Model.load_t2t_model()(messages, max_new_tokens = 384)
+                output = Model.load_t2t_model()(messages, max_new_tokens = 256)
                 return output[0]['generated_text'][2]['content']
 
         except Exception as e:

@@ -7,7 +7,7 @@ from src.data_components.data_ingestion import DataFile
 from src.data_components.data_similarity_search import Similarity_Search
 from src.model_components.models import Model
 
-st.set_page_config(page_title="Chat with PDF and retrieve document", page_icon="🦙", layout="centered", 
+st.set_page_config(page_title="Chat with PDF and retrieve document", page_icon="🦙", layout="wide", 
                    initial_sidebar_state="collapsed")
 
 
@@ -15,23 +15,38 @@ st.set_page_config(page_title="Chat with PDF and retrieve document", page_icon="
 with open ('design.css') as source:
     st.markdown(f"<style>{source.read()}</style>",unsafe_allow_html=True)
 
+st.markdown(
+    """
+    <style>
+    .css-1jc7ptx, .e1ewe7hr3, .viewerBadge_container__1QSob,
+    .styles_viewerBadge__1yB5_, .viewerBadge_link__1S137,
+    .viewerBadge_text__1JaDK {
+        display: none;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
-st.markdown('<style>div.block-container{padding-top:0.2rem;}</style>', unsafe_allow_html=True)
+st.markdown('<style>div.block-container{padding-top:0.3rem;}</style>', unsafe_allow_html=True)
+
 st.header("*Your :rainbow[Document], Your :rainbow[Chat]* !")
 
-with st.expander(label = ":blue[📋 Tips & Guidance]"):
+with st.expander(label=":blue[📋 Tips & Guidance]"):
     st.markdown("""
         **I appreciate and welcome your engagement with this application! Upload your PDF using the side section (arrow on top left), ask a question, and get summaries based on your query.**<br>
         
         **:rainbow[Enjoy exploring!]**
-        """, unsafe_allow_html=True) 
+        """, unsafe_allow_html=True)
 
 st.markdown("""
     <div style="text-align: right;">
-        <p>Made by- <strong>Yash Keshari</strong> <span style="font-size: 24px;">😎</span></p>
+        <p>Made by- <strong>Yash Keshari</strong></p>
     </div>
     """, unsafe_allow_html=True)
+
 st.markdown(" ")
+
 
 # User Input with data extration, transformation and saving the data.
 with st.sidebar:
