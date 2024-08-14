@@ -1,6 +1,6 @@
 import streamlit as st 
 import time
-from utils import output_stream, casual_responses, clear_session_embedded_data
+from utils import output_stream, casual_responses, model_prompt
 
 from src.pipelines.main_pipe import file_handling
 from src.data_components.data_ingestion import DataFile
@@ -65,7 +65,7 @@ with st.sidebar:
                 st.error('Upload PDF file before deleting.')
 
     # loading text2text model
-    Model.load_t2t_model()
+    # Model.load_t2t_model()
         
 
 # initializing chat history 
@@ -83,11 +83,11 @@ if not user_file:       #If user doen't upload any file then the model talks cas
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
-            
+
         with st.chat_message("assistant"):
             with st.spinner(" "):
                 res = casual_responses(prompt)
-                time.sleep(2)
+                time.sleep(0.5)
                 response = st.write_stream(res)
    
         st.session_state.messages.append({"role": "assistant", "content": response})
@@ -104,7 +104,7 @@ else:
                 simm_data = Similarity_Search.similarity_compute(user_query=prompt, file_read_path="artifact/data/ext_data.csv")
                 if simm_data == None:
                     res = casual_responses(prompt)
-                    time.sleep(2)
+                    time.sleep(0.5)
                     response = st.write_stream(res)
                 else:
                     # final_output = Model.summary_model(query = prompt, context = simm_data)
