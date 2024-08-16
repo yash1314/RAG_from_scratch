@@ -44,13 +44,21 @@ class Model:
             
             elif type=='summary':
                 messages = [{"role": "system", "content": "You are pdf summary bot."},
-                            {"role": "user", "content": f"""
-                                                Your task is to generate a summary based on the provided query and context (extracted from pdf). 
-                                                
-                                                1. **Context:** ```{context}```
-                                                2. **Query:** {u_input}
+                            {"role": "user", "content": f"""### Task: Summarize the Context
 
-                            Summarize the context based on the query, focusing on relevant details and key points."""}]
+                                                                    **Context:**
+                                                                    {context}
+
+                                                                    **Query:**
+                                                                    {u_input}
+
+                                                                    **Instructions:**
+                                                                    1. Review the context provided.
+                                                                    2. Answer the query by summarizing the relevant details from the context.
+                                                                    3. Ensure the summary is clear, concise, and directly addresses the query.
+
+                                                                    **Summary:**
+                                                                    """}]
                 
                 output = Model.load_t2t_model()(messages, max_new_tokens = 150)
                 return output[0]['generated_text'][2]['content']

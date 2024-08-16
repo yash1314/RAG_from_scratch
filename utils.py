@@ -60,19 +60,19 @@ def clear_session_embedded_data():
     if "embedded_data" in st.session_state:
         del st.session_state["embedded_data"]
 
-def model_prompt(old_output, new_q):
-    """The function aims to create a prompt for llm which includes one previous history."""
-    message = [{"role": "system", "content": """You help everyone by answering questions, and improve your answers from previous answer in History.
-                                                Don't try to make up an answer, if you don't know just say that you don't know.
-                                                Answer in the same language the question was asked.
-                                                Answer in a way that is easy to understand.
-                                                Do not say "Based on the information you provided, ..." or "I think the answer is...". Just answer the question directly in detail.
-                                                Use only the following pieces of context to answer the question at the end."""},
+# def model_prompt(old_output, new_q):
+#     """The function aims to create a prompt for llm which includes one previous history."""
+#     message = [{"role": "system", "content": """You help everyone by answering questions, and improve your answers from previous answer in History.
+#                                                 Don't try to make up an answer, if you don't know just say that you don't know.
+#                                                 Answer in the same language the question was asked.
+#                                                 Answer in a way that is easy to understand.
+#                                                 Do not say "Based on the information you provided, ..." or "I think the answer is...". Just answer the question directly in detail.
+#                                                 Use only the following pieces of context to answer the question at the end."""},
 
-                {"role": "user", "content": old_output['user_previous_query']},
+#                 {"role": "user", "content": old_output['user_previous_query']},
 
-                {"role": "system", "content": old_output['system_previous_query']},
+#                 {"role": "system", "content": old_output['system_previous_query']},
                 
-                {"role": "user", "content": new_q}]
-    return message
+#                 {"role": "user", "content": new_q}]
+#     return message
      
