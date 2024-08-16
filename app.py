@@ -1,6 +1,6 @@
 import streamlit as st 
 import time
-from utils import output_stream, casual_responses, model_prompt
+from utils import output_stream, casual_responses
 
 from src.pipelines.main_pipe import file_handling
 from src.data_components.data_ingestion import DataFile
@@ -66,8 +66,6 @@ with st.sidebar:
             else:
                 st.error('Upload PDF file before deleting.')
 
-    # loading text2text model
-    # Model.load_t2t_model()
         
 
 # initializing chat history 
