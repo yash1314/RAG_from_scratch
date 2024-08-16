@@ -64,7 +64,11 @@ with st.sidebar:
                 DataFile.remove_file(folder_name = 'artifact')
                 st.success(f"File {user_file.name} deleted successfully")
             else:
-                st.error('Upload PDF file before deleting.')
+                try:
+                    DataFile.remove_file(folder_name = 'artifact')
+                    st.success(f"File {user_file.name} deleted successfully")
+                except Exception as e:
+                    st.error(f'Upload PDF file before deleting.')
 
         
 

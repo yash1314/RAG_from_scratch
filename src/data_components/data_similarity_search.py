@@ -50,11 +50,12 @@ class Similarity_Search:
             similarity_with_idx = list(enumerate(cosine_similarities))
             similarity_with_idx.sort(key = lambda x:x[1], reverse= True)
 
-            top_2 = similarity_with_idx[:2]
+            top_2 = similarity_with_idx[:3]
             final_str_data = ""
             for idx, val in top_2:
                 final_str_data += df.iloc[idx].to_list()[0] + "\n"
             
             return final_str_data
+        
         except Exception as e:
             print(f"Error in calcualting top_2 doc: {str(e)}")

@@ -1,4 +1,4 @@
-import pymupdf, os
+import pymupdf, os, time
 import streamlit as st
 from src.data_components.data_ingestion import DataFile
 from utils import reg_x
@@ -15,12 +15,26 @@ class PDF_Extract_Transform:
         Extract and return data from uploaded pdf 
         """
         try:
-            doc = pymupdf.open(file_path)
+            doc = pymupdf.open(file_path)  
 
-            text = [page.get_text() for page in doc]
-            f_text = [reg_x(i.replace("\n", " ")) for i in text]
+            full_text = [page.get_text() for page in doc]
+            cleaned_text = [reg_x(page.replace("\n", " ")) for page in full_text]
 
-            return f_text
+            combined_text = " ".join(cleaned_text)
+            
+            chunk_size = 2000  
+            overlap = 100  #overlap to preserve information/context
+
+            chunks = []
+            start = 0
+            while start < len(combined_text):
+                end = min(start + chunk_size, len(combined_text))
+                chunk = combined_text[start:end]
+                chunks.append(chunk)
+                start += chunk_size - overlap 
+
+            return chunks
+
         except Exception as e:
             print(f"Error in data extraction: {str(e)}")
             return []

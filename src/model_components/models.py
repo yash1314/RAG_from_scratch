@@ -35,7 +35,8 @@ class Model:
                                                             Always respond in the language in which the question was asked.
                                                             Provide answers that are straightforward and easy to understand.
                                                             Avoid phrases like 'Based on the information you provided, ...' or 'I think the answer is...'.
-                                                            Directly address the question with detailed information using only the provided context."""},
+                                                            Directly address the question with detailed information using only the provided context.
+                                                            Provide your answer in a maximum of 150 words."""},
                             
                             {"role": "user", "content": u_input}]
                 
@@ -44,8 +45,8 @@ class Model:
             
             
             elif type=='summary':
-                messages = [{"role": "system", "content": "You are pdf summary bot."},
-                            {"role": "user", "content": f"""### Task: Summarize the Context
+                messages = [{"role": "system", "content": "You are a PDF summary bot."},
+                            {"role": "user", "content": f"""### Task: Summarize the Context extracted from a PDF document.
 
                                                                     **Context:**
                                                                     {context}
@@ -54,12 +55,14 @@ class Model:
                                                                     {u_input}
 
                                                                     **Instructions:**
-                                                                    1. Review the context provided.
-                                                                    2. Answer the query by summarizing the relevant details from the context.
-                                                                    3. Ensure the summary is clear, concise, and directly addresses the query.
+                                                                    1. Review the provided context.
+                                                                    2. Summarize the relevant details to answer the query.
+                                                                    3. Always respond in the language in which the question was asked.
+                                                                    4. Ensure the summary is clear and concise.
+                                                                    5. Limit your response to a maximum of 150 words.
+                                                                    
+                                                                    **Summary:**"""}]
 
-                                                                    **Summary:**
-                                                                    """}]
                 
                 output = Model.load_t2t_model()(messages, max_new_tokens = 150)
                 return output[0]['generated_text'][2]['content']
