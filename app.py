@@ -8,31 +8,18 @@ from src.data_components.data_similarity_search import Similarity_Search
 from src.model_components.models import Model
 
 st.set_page_config(page_title="Chat with PDF and retrieve document", page_icon="🦙", layout="wide", 
-                   initial_sidebar_state="collapsed")
+                   initial_sidebar_state="auto")
 
 
 # bot and user chat alignment
 with open ('design.css') as source:
     st.markdown(f"<style>{source.read()}</style>",unsafe_allow_html=True)
 
-st.markdown(
-    """
-    <style>
-    .css-1jc7ptx, .e1ewe7hr3, .viewerBadge_container__1QSob,
-    .styles_viewerBadge__1yB5_, .viewerBadge_link__1S137,
-    .viewerBadge_text__1JaDK {
-        display: none;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
 st.markdown('<style>div.block-container{padding-top:0.3rem;}</style>', unsafe_allow_html=True)
 
-st.header("*Your :rainbow[Document], Your :rainbow[Chat]* !")
+st.header("*Your :violet[Document], Your :violet[Chat]* !")
 
-with st.expander(label=":blue[📋 Tips & Guidance]"):
+with st.expander(label="📋 Tips & Guidance"):
     st.markdown("""
         **I appreciate and welcome your engagement with this application! Upload your PDF using the side section (arrow on top left), ask a question, and get summaries based on your query.**<br>
         
