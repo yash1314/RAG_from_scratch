@@ -30,12 +30,13 @@ class Model:
     def QA_model(u_input, type, context:str = None):
         try:
             if type=="qa":
-                messages = [{"role": "system", "content": """You help everyone by answering questions.
-                                                Don't try to make up an answer, if you don't know just say that you don't know.
-                                                Answer in the same language the question was asked.
-                                                Answer in a way that is easy to understand.
-                                                Do not say "Based on the information you provided, ..." or "I think the answer is...". Just answer the question directly in detail.
-                                                Use only the following pieces of context to answer the question at the end."""},
+                messages = [{"role": "system", "content": """You assist users by providing clear and accurate answers to their questions.
+                                                            If you do not know the answer, simply state that you do not know.
+                                                            Always respond in the language in which the question was asked.
+                                                            Provide answers that are straightforward and easy to understand.
+                                                            Avoid phrases like 'Based on the information you provided, ...' or 'I think the answer is...'.
+                                                            Directly address the question with detailed information using only the provided context."""},
+                            
                             {"role": "user", "content": u_input}]
                 
                 output = Model.load_t2t_model()(messages, max_new_tokens = 150)
