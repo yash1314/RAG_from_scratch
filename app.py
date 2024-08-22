@@ -22,7 +22,7 @@ st.header("*Your :violet[Document], Your :violet[Chat]* !")
 with st.expander(label="📋 Tips & Guidance"):
     st.markdown("""
         **I appreciate and welcome your engagement with this application! Upload your PDF using the side section (arrow on top left), ask a question, and get summaries based on your query.**<br>
-        
+
         **:rainbow[Enjoy exploring!]**
         """, unsafe_allow_html=True)
 
@@ -48,9 +48,9 @@ with st.sidebar:
             # File saving and transformation
             if user_file:   
                 with st.spinner('Loading and transforming Data.'):
-                    time.sleep(1)
+                    time.sleep(0.5)
                     file_handling(file = user_file)
-                    time.sleep(1)
+                    time.sleep(0.5)
                 st.success('File transformed successfully!', icon="✅")
                 
                 # loading models beforehand if user submit file
@@ -90,9 +90,14 @@ if not user_file:       #If user doen't upload any file then the model talks cas
 
         with st.chat_message("assistant"):
             with st.spinner(" "):
+                start_time = time.monotonic()
+
                 res = casual_responses(prompt)
-                time.sleep(0.5)
                 response = st.write_stream(res)
+                
+                processed_time = round(time.monotonic() - start_time, ndigits=2)
+                st.markdown(f'<div style="text-align: right;">Processed time: {processed_time} seconds</div>',
+                            unsafe_allow_html=True)
    
         st.session_state.messages.append({"role": "assistant", "content": response})
 
@@ -105,17 +110,20 @@ else:
 
         with st.chat_message("assistant"):
             with st.spinner(" "):
+                start_time = time.monotonic()
                 simm_data = Similarity_Search.similarity_compute(user_query=prompt, file_read_path="artifact/data/ext_data.csv")
                 if simm_data == None:
                     res = casual_responses(prompt)
-                    time.sleep(0.5)
                     response = st.write_stream(res)
                 else:
                     # final_output = Model.summary_model(query = prompt, context = simm_data)
-                    final_output = Model.QA_model(u_input = prompt, type = "qa", context=simm_data)
+                    final_output = Model.QA_model(u_input = prompt, type = "summary", context=simm_data)
                     response = st.write_stream(output_stream(final_output))
+
+                    processed_time = round(time.monotonic() - start_time, ndigits=2)
 
                     with st.expander("Click to see context data from PDF"):
                         st.write(simm_data)
-
+                    st.markdown(f'<div style="text-align: right;">Processed time: {processed_time} seconds</div>',
+                            unsafe_allow_html=True)
         st.session_state.messages.append({"role": "assistant", "content": response})

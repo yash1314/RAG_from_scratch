@@ -31,22 +31,23 @@ class Model:
         try:
             if type=="qa":
                 messages = [{"role": "system", "content": """You assist users by providing clear and accurate answers to their questions.
+                                                            Provide your answer in a maximum of 100 words.
                                                             If you do not know the answer, simply state that you do not know.
                                                             Always respond in the language in which the question was asked.
                                                             Provide answers that are straightforward and easy to understand.
                                                             Avoid phrases like 'Based on the information you provided, ...' or 'I think the answer is...'.
                                                             Directly address the question with detailed information using only the provided context.
-                                                            Provide your answer in a maximum of 150 words."""},
+                                                            """},
                             
                             {"role": "user", "content": u_input}]
                 
-                output = Model.load_t2t_model()(messages, max_new_tokens = 150)
+                output = Model.load_t2t_model()(messages, max_new_tokens = 105)
                 return output[0]['generated_text'][2]['content']
             
             
             elif type=='summary':
-                messages = [{"role": "system", "content": "You are a PDF summary bot."},
-                            {"role": "user", "content": f"""### Task: Summarize the Context extracted from a PDF document.
+                messages = [{"role": "system", "content": "You are a assistant bot."},
+                            {"role": "user", "content": f"""### Task: Summarize the Context extracted from a uploaded PDF document.
 
                                                                     **Context:**
                                                                     {context}
@@ -56,10 +57,10 @@ class Model:
 
                                                                     **Instructions:**
                                                                     1. Review the provided context.
-                                                                    2. Summarize the relevant details to answer the query.
-                                                                    3. Always respond in the language in which the question was asked.
-                                                                    4. Ensure the summary is clear and concise.
-                                                                    5. Limit your response to a maximum of 150 words.
+                                                                    2. Limit your response to a maximum of 150 words.
+                                                                    3. Summarize the relevant details to answer the query.
+                                                                    4. Always respond in the language in which the question was asked.
+                                                                    5. Ensure the summary is clear and concise. 
                                                                     
                                                                     **Summary:**"""}]
 
