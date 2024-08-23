@@ -23,12 +23,19 @@ with st.expander(label="📋 Tips & Guidance"):
     st.markdown("""
         **I appreciate and welcome your engagement with this application! Upload your PDF using the side section (arrow on top left), ask a question, and get summaries based on your query.**<br>
 
-        **:rainbow[Enjoy exploring!]**
+        **:green[Enjoy exploring!]**
         """, unsafe_allow_html=True)
+
+
+import streamlit as st
 
 st.markdown("""
     <div style="text-align: right;">
-        <p>Made by- <strong>Yash Keshari</strong></p>
+        <span style="display: inline-block;">Made by- <strong>Yash Keshari,</strong></span>
+        <span style="display: inline-block; margin-left: 5px;">
+            <a href="https://www.linkedin.com/in/yash907/" target="_blank" style="text-decoration: none; color: blue;">LinkedIn,</a>
+            <a href="https://github.com/yash1314" target="_blank" style="text-decoration: none; color: blue; margin-left: 5px;">GitHub</a>
+        </span>
     </div>
     """, unsafe_allow_html=True)
 
