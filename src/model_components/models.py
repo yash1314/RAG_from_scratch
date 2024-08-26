@@ -21,7 +21,7 @@ class Model:
     @st.cache_resource(show_spinner=False)
     def load_t2t_model():
         try:
-            return pipeline("text-generation", model="Qwen/Qwen2-0.5B-Instruct", use_fast = True)
+            return pipeline("text-generation", model="Qwen/Qwen2-0.5B-Instruct", use_fast=True)
         except Exception as e:
             print(f"Error in loading text-to-text model: {str(e)}")
         
@@ -30,18 +30,10 @@ class Model:
     def QA_model(u_input, type, context:str = None):
         try:
             if type=="qa":
-                messages = [{"role": "system", "content": """You assist users by providing clear and accurate answers to their questions.
-                                                            Provide your answer in a maximum of 100 words.
-                                                            If you do not know the answer, simply state that you do not know.
-                                                            Always respond in the language in which the question was asked.
-                                                            Provide answers that are straightforward and easy to understand.
-                                                            Avoid phrases like 'Based on the information you provided, ...' or 'I think the answer is...'.
-                                                            Directly address the question with detailed information using only the provided context.
-                                                            """},
-                            
+                messages = [{"role": "system", "content": """You assist users by providing clear and accurate answers to their questions."""},
                             {"role": "user", "content": u_input}]
                 
-                output = Model.load_t2t_model()(messages)
+                output = Model.load_t2t_model()(messages, max_new_tokens = 256)
                 return output[0]['generated_text'][2]['content']
             
             
@@ -57,15 +49,14 @@ class Model:
 
                                                                     **Instructions:**
                                                                     1. Review the provided context.
-                                                                    2. Limit your response to a maximum of 150 words.
-                                                                    3. Summarize the relevant details to answer the query.
-                                                                    4. Always respond in the language in which the question was asked.
-                                                                    5. Ensure the summary is clear and concise. 
+                                                                    2. Summarize the relevant details to answer the query.
+                                                                    3. Always respond in the language in which the question was asked.
+                                                                    4. Ensure the summary is clear and concise. 
                                                                     
-                                                                    **Summary:**"""}]
+                                                                    **Summary: **"""}]
 
                 
-                output = Model.load_t2t_model()(messages)
+                output = Model.load_t2t_model()(messages, max_new_tokens = 256)
                 return output[0]['generated_text'][2]['content']
 
         except Exception as e:

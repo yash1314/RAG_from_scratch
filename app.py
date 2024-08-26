@@ -26,9 +26,6 @@ with st.expander(label="📋 Tips & Guidance"):
         **:green[Enjoy exploring!]**
         """, unsafe_allow_html=True)
 
-
-import streamlit as st
-
 st.markdown("""
     <div style="text-align: right;">
         <span style="display: inline-block;">Made by- <strong>Yash Keshari,</strong></span>
@@ -57,7 +54,7 @@ with st.sidebar:
                 with st.spinner('Loading and transforming Data.'):
                     time.sleep(0.5)
                     file_handling(file = user_file)
-                    time.sleep(0.5)
+                    time.sleep(0.2)
                 st.success('File transformed successfully!', icon="✅")
                 
             else:
@@ -87,7 +84,7 @@ for message in st.session_state.messages:
 
 # Chat elements 
 if not user_file:       #If user doen't upload any file then the model talks casually.
-    if prompt := st.chat_input("Talk to your PDF"):
+    if prompt := st.chat_input("Talk to a Chatbot"):
         
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
@@ -117,11 +114,12 @@ else:
             with st.spinner(" "):
                 start_time = time.monotonic()
                 simm_data = Similarity_Search.similarity_compute(user_query=prompt, file_read_path="artifact/data/ext_data.csv")
+                
                 if simm_data == None:
                     res = casual_responses(prompt)
                     response = st.write_stream(res)
+
                 else:
-                    # final_output = Model.summary_model(query = prompt, context = simm_data)
                     final_output = Model.QA_model(u_input = prompt, type = "summary", context=simm_data)
                     response = st.write_stream(output_stream(final_output))
 
@@ -129,6 +127,7 @@ else:
 
                     with st.expander("Click to see context data from PDF"):
                         st.write(simm_data)
+                    
                     st.markdown(f'<div style="text-align: right;">Processed time: {processed_time} seconds</div>',
                             unsafe_allow_html=True)
         st.session_state.messages.append({"role": "assistant", "content": response})
