@@ -31,33 +31,30 @@ class Model:
     def QA_model(u_input, type, context:str = None):
         try:
             if type=="qa":
-                messages = [{"role": "system", "content": """**Instructions:**
-                                                            1. You assist users by providing clear and accurate answers to their questions. 
-                                                            2. Limit your answers to 201 characters. 
-                                                            3. Answer in the language in which question is asked."""},
+                messages = [{"role": "system", "content": "**Instructions:**\n1. Provide clear, accurate answers.\n2. Limit answers to 201 characters.\n3. Use the same language as the question."},
                             {"role": "user", "content": u_input}]
+
                 
                 output = Model.load_t2t_model()(messages, max_new_tokens = 196)
                 return output[0]['generated_text'][2]['content']
             
             
             elif type=='summary':
-                messages = [{"role": "system", "content": "You are a assistant bot."},
-                            {"role": "user", "content": f"""### Task: Summarize the Context extracted from a uploaded PDF document.
-
+                messages = [{"role": "system", "content": """You are an assistant bot specializing in summarizing texts. Follow these rules:
+        
+                                                            1. **Limit Summary**: The summary must be within 201 characters.
+                                                            2. **Review Context**: Carefully read the context provided.
+                                                            3. **Conciseness**: Summarize clearly, focusing on the key points.
+                                                            4. **Language**: Respond in the language of the query.
+                                                            5. **Relevance**: Address the query directly based on the context.
+                                                            6. **Objectivity**: Maintain neutrality and avoid personal opinions."""},
+                            {"role": "user","content": f"""### Task: Summarize the context from a PDF document.
                                                                     **Context:**
                                                                     {context}
 
                                                                     **Query:**
                                                                     {u_input}
 
-                                                                    **Instructions:**
-                                                                    1. Limit your answers to 201 characters.
-                                                                    2. Review the provided context.
-                                                                    3. Summarize the relevant details to answer the query.
-                                                                    4. Always respond in the language in which the question was asked.
-                                                                    5. Ensure the summary is clear and concise. 
-                                                                    
                                                                     **Summary: **"""}]
 
                 
