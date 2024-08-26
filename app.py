@@ -60,8 +60,6 @@ with st.sidebar:
                     time.sleep(0.5)
                 st.success('File transformed successfully!', icon="✅")
                 
-                # loading models beforehand if user submit file
-                Model.embed_model()
             else:
                 st.error('Upload PDF file before submitting.')
 
