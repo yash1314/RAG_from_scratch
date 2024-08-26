@@ -41,7 +41,7 @@ class Model:
                             
                             {"role": "user", "content": u_input}]
                 
-                output = Model.load_t2t_model()(messages, max_new_tokens = 105)
+                output = Model.load_t2t_model()(messages)
                 return output[0]['generated_text'][2]['content']
             
             
@@ -65,7 +65,7 @@ class Model:
                                                                     **Summary:**"""}]
 
                 
-                output = Model.load_t2t_model()(messages, max_new_tokens = 150)
+                output = Model.load_t2t_model()(messages)
                 return output[0]['generated_text'][2]['content']
 
         except Exception as e:
