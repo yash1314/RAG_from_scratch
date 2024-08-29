@@ -31,11 +31,10 @@ class Model:
     def QA_model(u_input, type, context:str = None):
         try:
             if type=="qa":
-                messages = [{"role": "system", "content": "**Instructions:**\n1. Provide clear, accurate answers.\n2. Limit answers to 201 characters.\n3. Use the same language as the question."},
+                messages = [{"role": "system", "content": "**Instructions:**\n1. Provide clear, accurate answers.\n2. Limit answers to 201 tokens while excluding query input tokens.\n3. Use the same language as the question.\n4.Shortish answers are better. But don't omit detail."},
                             {"role": "user", "content": u_input}]
-
                 
-                output = Model.load_t2t_model()(messages, max_new_tokens = 196)
+                output = Model.load_t2t_model()(messages, max_new_tokens = 196+len(u_input.split(" ")))
                 return output[0]['generated_text'][2]['content']
             
             
@@ -48,7 +47,7 @@ class Model:
                                                             4. **Language**: Respond in the language of the query.
                                                             5. **Relevance**: Address the query directly based on the context.
                                                             6. **Objectivity**: Maintain neutrality and avoid personal opinions."""},
-                            {"role": "user","content": f"""### Task: Summarize the context from a PDF document.
+                            {"role": "user","content": f"""Task: Summarize the context from uploaded PDF document.
                                                                     **Context:**
                                                                     {context}
 

@@ -7,7 +7,7 @@ from src.data_components.data_ingestion import DataFile
 from src.data_components.data_similarity_search import Similarity_Search
 from src.model_components.models import Model
 
-st.set_page_config(page_title="Chat with PDF and retrieve document", page_icon="🦙", layout="wide", 
+st.set_page_config(page_title="Chat with PDF and retrieve document", page_icon="📚", layout="wide", 
                    initial_sidebar_state="auto")
 
 
@@ -15,9 +15,9 @@ st.set_page_config(page_title="Chat with PDF and retrieve document", page_icon="
 with open ('design.css') as source:
     st.markdown(f"<style>{source.read()}</style>",unsafe_allow_html=True)
 
-st.markdown('<style>div.block-container{padding-top:0.3rem;}</style>', unsafe_allow_html=True)
+st.markdown('<style>div.block-container{padding-top:0.4rem;}</style>', unsafe_allow_html=True)
 
-st.header("*Your :violet[Document], Your :violet[Chat]* !")
+st.header("*Your :violet[Document], Your :violet[Chat]* 💬 !")
 
 with st.expander(label="📋 Tips & Guidance"):
     st.markdown("""
