@@ -5,14 +5,13 @@ from src.model_components.models import Model
 from better_profanity import profanity
 
 
-
 # streaming output
-def output_stream(output):
+def stream_output(output):
     """Output answer in stream of words."""
     try: 
         for word in output.split(" "):
             yield word + " "
-            time.sleep(0.04)
+            time.sleep(0.002)
             
     except Exception as e:
             print(f"Error in output_stream: {str(e)}")  

@@ -31,33 +31,33 @@ class Model:
     def QA_model(u_input, type, context:str = None):
         try:
             if type=="qa":
-                messages = [{"role": "system", "content": "**Instructions:**\n1. Provide clear, accurate answers.\n2. Limit answers to 201 tokens while excluding query input tokens.\n3. Use the same language as the question.\n4.Shortish answers are better. But don't omit detail."},
+                messages = [{"role": "system", "content": "**Instructions:**\n1. Provide clear, accurate answers based on the context, including previous interactions.\n2. Use the same language as the question.\n3. Be concise but, shortish answers are better. Never omit detail.\n4. Incorporate information from previous questions and answers to provide a coherent response.\n5. If you cannot provide an answer based on the provided context, acknowledge this politely and state that you do not have enough information."},
                             {"role": "user", "content": u_input}]
                 
-                output = Model.load_t2t_model()(messages, max_new_tokens = 196+len(u_input.split(" ")))
+                output = Model.load_t2t_model()(messages, max_new_tokens = 750)
                 return output[0]['generated_text'][2]['content']
             
             
             elif type=='summary':
                 messages = [{"role": "system", "content": """You are an assistant bot specializing in summarizing texts. Follow these rules:
         
-                                                            1. **Limit Summary**: The summary must be within 201 characters.
+                                                            1. **Summary Limit**: The summary must be less than 500 characters.
                                                             2. **Review Context**: Carefully read the context provided.
                                                             3. **Conciseness**: Summarize clearly, focusing on the key points.
                                                             4. **Language**: Respond in the language of the query.
-                                                            5. **Relevance**: Address the query directly based on the context.
-                                                            6. **Objectivity**: Maintain neutrality and avoid personal opinions."""},
-                            {"role": "user","content": f"""Task: Summarize the context from uploaded PDF document.
+                                                            5. **Relevance**: Address the query directly based on the context."""},
+                            
+                            {"role": "user","content": f"""**Task**: Summarize the context based on query.
                                                                     **Context:**
                                                                     {context}
 
                                                                     **Query:**
                                                                     {u_input}
 
-                                                                    **Summary: **"""}]
+                                                                    **Summary:**"""}]
 
                 
-                output = Model.load_t2t_model()(messages, max_new_tokens = 196)
+                output = Model.load_t2t_model()(messages, max_new_tokens = 500)
                 return output[0]['generated_text'][2]['content']
 
         except Exception as e:
