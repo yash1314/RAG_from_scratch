@@ -30,22 +30,24 @@ with st.sidebar:
     st.markdown('# Contact:')
     st.markdown(":red[------------------------------------]")
     st.subheader('Made by: Yash Keshari')
-    st.markdown("### [Linkedin](https://www.linkedin.com/in/yash907/)")
-    st.markdown("### [Github](https://github.com/yash1314)")
+    st.markdown("### [Linkedin](https://www.linkedin.com/in/yash907/), [Github](https://github.com/yash1314)")
 
+# to handle file in stramlit file uploader function
+if "file_uploader_key" not in st.session_state:
+    st.session_state["file_uploader_key"] = 0
 
 # User Input with data extration, transformation and saving the data.
 with _bottom.popover('Upload File'):  
     with st.container():           
         user_file = st.file_uploader(label=':blue[**Upload your PDF file!**]',
-                                                type= 'pdf', accept_multiple_files=False)
+                                                type= 'pdf', accept_multiple_files=False, key=st.session_state["file_uploader_key"])
         upload_button = st.button('Upload_file', use_container_width=True)
         if upload_button:
             if user_file is not None:   
                 with st.spinner('Loading and transforming Data.'):
                     time.sleep(0.2)
                     file_handling(file = user_file)
-                    time.sleep(0.2)
+                    time.sleep(0.1)
                     st.success('File transformed successfully!', icon="✅")
             else:
                 st.error('Upload file before submitting.')
@@ -54,12 +56,13 @@ with _bottom.popover('Upload File'):
         if delete_button:
             if user_file is not None:
                 DataFile.remove_file(folder_name = 'artifact')
-                st.success(f"File {user_file.name} deleted successfully")
-                user_file = None
+                st.success(f"File {user_file.name} deleted successfully", icon="✅")
+                st.session_state["file_uploader_key"] += 1
+                st.experimental_rerun()
             else:
                 try:
                     DataFile.remove_file(folder_name = 'artifact')
-                    st.success(f"File {user_file.name} deleted successfully")
+                    st.success(f"File '{user_file.name}' deleted successfully")
                 except Exception as e:
                     st.error(f'Upload file before deleting.')
 
