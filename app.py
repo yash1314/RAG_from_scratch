@@ -58,7 +58,7 @@ with _bottom.popover('Upload File'):
                 DataFile.remove_file(folder_name = 'artifact')
                 st.success(f"File {user_file.name} deleted successfully", icon="✅")
                 st.session_state["file_uploader_key"] += 1
-                st.rerun(scope = 'fragment')
+                st.rerun()
             else:
                 try:
                     DataFile.remove_file(folder_name = 'artifact')
