@@ -1,6 +1,7 @@
 from src.data_components.data_ingestion import DataFile
 from src.data_components.data_transform import PDF_Extract_Transform
 from src.data_components.data_similarity_search import Similarity_Search
+from src.logger import logging
 
 
 def file_handling(file):
@@ -13,3 +14,5 @@ def file_handling(file):
 
     # Perform embedding and similarity search on transformed data.
     Similarity_Search.embed_data('artifact/data/ext_data.csv')
+
+    logging.info("File successfully handled.")

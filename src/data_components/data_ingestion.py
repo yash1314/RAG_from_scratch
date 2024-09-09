@@ -1,10 +1,12 @@
-import os, logging, shutil
+import os, shutil, sys
 import streamlit as st
-
+from src.logger import logging
+from src.exception import CustomException
 
 class DataFile:
     """The File class takes user file and perform file opeartions such as read, write, delete."""
     
+
     @staticmethod
     def create_file(file_name, file_path):
         """
@@ -16,12 +18,14 @@ class DataFile:
 
             full_path = os.path.join(file_path, file_name)
 
-            print(f"File successfully create at {full_path}")
+            logging.info(f"File successfully created at {full_path}")
             return full_path
                 
-        except :
-            print(f"Error in creating {file_name} at {file_path}")
-        
+        except Exception as e:
+            logging.info(f"Error in file creation at {full_path}")
+            CustomException(e, sys)
+
+            
 
     @staticmethod
     def store_file(file:None, folder_name:str):
@@ -36,10 +40,11 @@ class DataFile:
             with open(os.path.join(folder, file.name), mode='wb') as w:
                 w.write(file.getvalue())
 
-            print('Data_ingestion success')
+            logging.info(f"File {file.name}, successfully stored at {folder}")
 
-        except :
-            print('Error in data ingestion') 
+        except Exception as e:
+            logging.info(f"Error in storing file {file.name}")
+            CustomException(e, sys)
 
 
     @staticmethod
@@ -50,7 +55,8 @@ class DataFile:
         try:             
             if os.path.isdir(folder_name):
                 shutil.rmtree(folder_name)
-                print(f"File {folder_name} successfully removed.")
-                
-        except:
-            print(f"Problem with the {folder_name} or its path.")
+                logging.info(f"File {folder_name} successfully removed")
+            
+        except Exception as e:
+            logging.info(f"Error in removing file {folder_name}")
+            CustomException(e, sys)

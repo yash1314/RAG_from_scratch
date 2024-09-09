@@ -1,6 +1,6 @@
 import streamlit as st
 from streamlit import _bottom
-import time
+import time, sys
 from utils import stream_output
 
 from src.pipelines.main_pipe import file_handling
@@ -8,8 +8,13 @@ from src.data_components.data_ingestion import DataFile
 from src.data_components.data_similarity_search import Similarity_Search
 from src.model_components.models import Model
 
-st.set_page_config(page_title="Chat with PDF and retrieve document", page_icon="📚", layout="centered", 
-                   initial_sidebar_state="auto")
+from src.exception import CustomException
+from src.logger import logging
+
+
+
+st.set_page_config(page_title="Chat with PDF and retrieve document", page_icon="📚", layout="wide", 
+                   initial_sidebar_state="expanded")
 
 
 # bot and user chat alignment
@@ -83,15 +88,20 @@ if not user_file:       #If user doen't upload any file then the model talks cas
         with st.chat_message("user"):
             st.markdown(prompt)
 
-        with st.chat_message("assistant"):
-            with st.spinner(" "):
-                start_time = time.monotonic()
-                res = Model.QA_model(u_input = prompt, type = "qa")    
-                response = st.write_stream(stream_output(res))
-                processed_time = round(time.monotonic() - start_time, ndigits=2)
-                st.markdown(f'<div style="text-align: right;">Processed time: {processed_time} seconds</div>',
-                            unsafe_allow_html=True)
-   
+        try:
+            with st.chat_message("assistant"):
+                with st.spinner(" "):
+                    start_time = time.monotonic()
+                    res = Model.QA_model(u_input = prompt, type = "qa")    
+                    response = st.write_stream(stream_output(res))
+                    processed_time = round(time.monotonic() - start_time, ndigits=2)
+                    st.markdown(f'<div style="text-align: right;">Processed time: {processed_time} seconds</div>',
+                                unsafe_allow_html=True)
+        except Exception as e:
+            logging.info(f"Error in generating casual response.")
+            CustomException(e, sys)
+            res = 'Error in generating casual response'
+
         st.session_state.messages.append({"role": "assistant", "content": res})
 
 else:
@@ -102,20 +112,26 @@ else:
             st.markdown(prompt)
 
         with st.chat_message("assistant"):
-            with st.spinner(" "):
-                start_time = time.monotonic()
-                simm_data = Similarity_Search.similarity_compute(user_query=prompt, file_read_path="artifact/data/ext_data.csv")
-                
-                if simm_data == None:
-                    res = Model.QA_model(u_input = prompt, type = "qa")
-                    response = st.write_stream(stream_output(res))
-                else:
-                    final_output = Model.QA_model(u_input = prompt, type = "summary", context=simm_data)
-                    response = st.write_stream(stream_output(final_output))
-                    processed_time = round(time.monotonic() - start_time, ndigits=2)
-                    with st.expander("Click to see context data from PDF"):
-                        st.write(simm_data)
-                    st.markdown(f'<div style="text-align: right;">Processed time: {processed_time} seconds</div>',
-                            unsafe_allow_html=True)
+            try:
+                with st.spinner(" "):
+                    start_time = time.monotonic()
+                    simm_data = Similarity_Search.similarity_compute(user_query=prompt, file_read_path="artifact/data/ext_data.csv")
+                    
+                    if simm_data == None:
+                        res = Model.QA_model(u_input = prompt, type = "qa")
+                        response = st.write_stream(stream_output(res))
+                    else:
+                        final_output = Model.QA_model(u_input = prompt, type = "summary", context=simm_data)
+                        response = st.write_stream(stream_output(final_output))
+                        processed_time = round(time.monotonic() - start_time, ndigits=2)
+                        with st.expander("Click to see context data from PDF"):
+                            st.write(simm_data)
+                        st.markdown(f'<div style="text-align: right;">Processed time: {processed_time} seconds</div>',
+                                unsafe_allow_html=True)
+                        
+            except Exception as e:
+                logging.info(f"Error in generating summary response.")
+                CustomException(e, sys)
+                res = 'Error in generating summary response'
                     
         st.session_state.messages.append({"role": "assistant", "content": final_output})

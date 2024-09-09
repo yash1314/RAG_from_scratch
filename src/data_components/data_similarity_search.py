@@ -2,11 +2,16 @@ from sklearn.metrics.pairwise import cosine_similarity
 from src.model_components.models import Model
 import pandas as pd
 import streamlit as st
+import sys
+
+from src.logger import logging
+from src.exception import CustomException
 
 
 class Similarity_Search:
     """
-    Performs Similarity search between a query and the data rows.
+    Performs Similarity search between a query and the data rows. 
+    Return: Top 2 similar data from document based on the query.
     """
 
     @st.cache_data(show_spinner=False)
@@ -25,7 +30,8 @@ class Similarity_Search:
             return st.session_state.embedded_data
         
         except Exception as e:
-            print(f"Error embedding doc data: {str(e)}")
+            logging.info(f"Error in embedding document data")
+            CustomException(e, sys)
     
 
     @staticmethod
@@ -43,8 +49,10 @@ class Similarity_Search:
             embedded_query = Similarity_Search.embedding_query(user_query)
             
             cosine_similarities = cosine_similarity(embedded_data, embedded_query)
+        
         except Exception as e:
-            print(f"Error in similarity search: {str(e)}")
+            logging.info(f"Error in calculating cosine_similarity")
+            CustomException(e, sys)
         
         try: 
             similarity_with_idx = list(enumerate(cosine_similarities))
@@ -58,4 +66,5 @@ class Similarity_Search:
             return final_str_data
         
         except Exception as e:
-            print(f"Error in calcualting top_2 doc: {str(e)}")
+            logging.info(f"Error in fetching 2 most similar data")
+            CustomException(e, sys)

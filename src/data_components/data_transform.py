@@ -1,8 +1,13 @@
-import pymupdf, os, time
+import pymupdf, os, time, sys
 import streamlit as st
 from src.data_components.data_ingestion import DataFile
+from src.logger import logging
+from src.exception import CustomException
+
 from utils import reg_x
 import pandas as pd
+
+
 
 class PDF_Extract_Transform:
     """
@@ -36,7 +41,8 @@ class PDF_Extract_Transform:
             return chunks
 
         except Exception as e:
-            print(f"Error in data extraction: {str(e)}")
+            logging.info(f"Error in pdf data extraction!")
+            CustomException(e, sys)
             return []
 
 
@@ -60,4 +66,5 @@ class PDF_Extract_Transform:
             print('Data_transformation success')
             
         except Exception as e:
-            print(f'Error saving PDF file: {str(e)}') 
+            logging.info(f"Error in document transformation and storing.")
+            CustomException(e, sys) 
