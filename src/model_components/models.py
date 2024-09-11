@@ -11,6 +11,7 @@ class Model:
     """This class contains model for different task which include summarization model 
     and embedding model."""
 
+
     @st.cache_resource(show_spinner=False)
     def embed_model():
         """This is an embedding model method which generate embedding for query and context."""
@@ -21,6 +22,7 @@ class Model:
         except Exception as e:
             logging.info(f"Error in loading embedding model.")
             CustomException(e, sys)
+
 
     @st.cache_resource(show_spinner=False)
     def load_t2t_model():
@@ -44,22 +46,22 @@ class Model:
             
             
             elif type=='summary':
-                messages = [{"role": "system", "content": """You are an assistant bot specializing in summarizing texts. Follow these rules:
-        
-                                                            1. **Summary Limit**: The summary must be less than 500 characters.
-                                                            2. **Review Context**: Carefully read the context provided.
-                                                            3. **Conciseness**: Summarize clearly, focusing on the key points.
-                                                            4. **Language**: Respond in the language of the query.
-                                                            5. **Relevance**: Address the query directly based on the context."""},
+                messages = [{"role": "system", "content": """You are an assistant bot specializing in summarizing texts."""},
                             
-                            {"role": "user","content": f"""**Task**: Summarize the context based on query.
-                                                                    **Context:**
-                                                                    {context}
-
-                                                                    **Query:**
-                                                                    {u_input}
-
-                                                                    **Summary:**"""}]
+                            {"role": "user","content": f"""Follow these rules:
+        
+                                                            1. **Review Context**: Carefully read the context provided.
+                                                            2. **Conciseness**: Summarize clearly, focusing on the key points.
+                                                            3. **Language**: Respond in the language of the query.
+                                                            4. **Relevance**: Address the query directly based on the context.
+                                                            
+                                                            **Context:**
+                                                            {context}
+                                                            
+                                                            **Query:**
+                                                            {u_input}
+                                                            
+                                                            **Summary:**"""}]
 
                 
                 output = Model.load_t2t_model()(messages, max_new_tokens = 500)

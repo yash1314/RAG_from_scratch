@@ -92,8 +92,10 @@ if not user_file:       #If user doen't upload any file then the model talks cas
             with st.chat_message("assistant"):
                 with st.spinner(" "):
                     start_time = time.monotonic()
+
                     res = Model.QA_model(u_input = prompt, type = "qa")    
                     response = st.write_stream(stream_output(res))
+                    
                     processed_time = round(time.monotonic() - start_time, ndigits=2)
                     st.markdown(f'<div style="text-align: right;">Processed time: {processed_time} seconds</div>',
                                 unsafe_allow_html=True)
@@ -121,8 +123,9 @@ else:
                         res = Model.QA_model(u_input = prompt, type = "qa")
                         response = st.write_stream(stream_output(res))
                     else:
-                        final_output = Model.QA_model(u_input = prompt, type = "summary", context=simm_data)
-                        response = st.write_stream(stream_output(final_output))
+                        res = Model.QA_model(u_input = prompt, type = "summary", context=simm_data)
+                        response = st.write_stream(stream_output(res))
+                        
                         processed_time = round(time.monotonic() - start_time, ndigits=2)
                         with st.expander("Click to see context data from PDF"):
                             st.write(simm_data)
@@ -134,4 +137,4 @@ else:
                 CustomException(e, sys)
                 res = 'Error in generating summary response'
                     
-        st.session_state.messages.append({"role": "assistant", "content": final_output})
+        st.session_state.messages.append({"role": "assistant", "content": res})
