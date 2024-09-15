@@ -22,7 +22,7 @@ class Model:
         
         except Exception as e:
             logging.info(f"Error in loading embedding model.")
-            CustomException(e, sys)
+            raise CustomException(e, sys)
 
 
     @st.cache_resource(show_spinner=False)
@@ -32,7 +32,7 @@ class Model:
             return model
         except Exception as e:
             logging.info(f"Error in loading text-to-text model.")
-            CustomException(e, sys)
+            raise CustomException(e, sys)
         
 
 
@@ -104,5 +104,5 @@ class Model:
 
         except Exception as e:
             logging.info(f"Error in generating text-to-text model output from Model class")
-            CustomException(e, sys)
+            raise CustomException(e, sys)
         

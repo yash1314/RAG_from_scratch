@@ -31,7 +31,7 @@ class Similarity_Search:
         
         except Exception as e:
             logging.info(f"Error in embedding document data")
-            CustomException(e, sys)
+            raise CustomException(e, sys)
     
 
     @staticmethod
@@ -52,7 +52,7 @@ class Similarity_Search:
         
         except Exception as e:
             logging.info(f"Error in calculating cosine_similarity")
-            CustomException(e, sys)
+            raise CustomException(e, sys)
         
         try: 
             similarity_with_idx = list(enumerate(cosine_similarities))
@@ -67,4 +67,4 @@ class Similarity_Search:
         
         except Exception as e:
             logging.info(f"Error in fetching 2 most similar data")
-            CustomException(e, sys)
+            raise CustomException(e, sys)
