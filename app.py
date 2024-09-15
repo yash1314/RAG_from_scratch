@@ -22,7 +22,8 @@ with open ('design.css') as source:
     st.markdown(f"<style>{source.read()}</style>",unsafe_allow_html=True)
 
 st.markdown('<style>div.block-container{padding-top:0.4rem;}</style>', unsafe_allow_html=True)
-st.title("*Your :violet[Document], Your :violet[Chat]* 💬 !")
+st.header("*Your :violet[Document], Your :violet[Chat]* 💬 !")
+
 with st.expander(label="📋 Tips & Guidance"):
     st.markdown("""
         **I appreciate and welcome your engagement with this application! Upload your PDF using the side section (arrow on top left), ask a question, and get summaries based on your query.**<br>
@@ -93,7 +94,7 @@ if not user_file:       #If user doen't upload any file then the model talks cas
                 with st.spinner(" "):
                     start_time = time.monotonic()
 
-                    res = Model.QA_model(u_input = prompt, type = "qa")    
+                    res = Model.gradio_model(message = prompt, type = "qa")    
                     response = st.write_stream(stream_output(res))
                     
                     processed_time = round(time.monotonic() - start_time, ndigits=2)
@@ -120,10 +121,10 @@ else:
                     simm_data = Similarity_Search.similarity_compute(user_query=prompt, file_read_path="artifact/data/ext_data.csv")
                     
                     if simm_data == None:
-                        res = Model.QA_model(u_input = prompt, type = "qa")
+                        res = Model.gradio_model(message = prompt, type = "qa")
                         response = st.write_stream(stream_output(res))
                     else:
-                        res = Model.QA_model(u_input = prompt, type = "summary", context=simm_data)
+                        res = Model.gradio_model(message = prompt, type = "summary", context=simm_data)
                         response = st.write_stream(stream_output(res))
                         
                         processed_time = round(time.monotonic() - start_time, ndigits=2)
