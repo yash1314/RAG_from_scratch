@@ -42,7 +42,6 @@ class PDF_Extract_Transform:
 
         except Exception as e:
             logging.info(f"Error in pdf data extraction!")
-            raise CustomException(e, sys)
             return []
 
 
@@ -67,4 +66,4 @@ class PDF_Extract_Transform:
             
         except Exception as e:
             logging.info(f"Error in document transformation and storing.")
-            raise CustomException(e, sys) 
+            

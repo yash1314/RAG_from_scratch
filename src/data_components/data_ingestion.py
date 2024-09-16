@@ -23,7 +23,7 @@ class DataFile:
                 
         except Exception as e:
             logging.info(f"Error in file creation at {full_path}")
-            raise CustomException(e, sys)
+            
 
             
 
@@ -44,7 +44,7 @@ class DataFile:
 
         except Exception as e:
             logging.info(f"Error in storing file {file.name}")
-            raise CustomException(e, sys)
+            
 
 
     @staticmethod
@@ -59,4 +59,4 @@ class DataFile:
             
         except Exception as e:
             logging.info(f"Error in removing file {folder_name}")
-            raise CustomException(e, sys)
+            

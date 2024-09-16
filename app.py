@@ -102,7 +102,6 @@ if not user_file:       #If user doen't upload any file then the model talks cas
                                 unsafe_allow_html=True)
         except Exception as e:
             logging.info(f"Error in generating casual response.")
-            raise CustomException(e, sys)
             res = 'Error in generating casual response'
 
         st.session_state.messages.append({"role": "assistant", "content": res})
@@ -135,7 +134,6 @@ else:
                         
             except Exception as e:
                 logging.info(f"Error in generating summary response.")
-                raise CustomException(e, sys)
                 res = 'Error in generating summary response'
                     
         st.session_state.messages.append({"role": "assistant", "content": res})

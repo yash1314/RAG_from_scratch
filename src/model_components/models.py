@@ -22,8 +22,7 @@ class Model:
         
         except Exception as e:
             logging.info(f"Error in loading embedding model.")
-            raise CustomException(e, sys)
-
+            
 
     @st.cache_resource(show_spinner=False)
     def load_t2t_model():
@@ -32,8 +31,7 @@ class Model:
             return model
         except Exception as e:
             logging.info(f"Error in loading text-to-text model.")
-            raise CustomException(e, sys)
-        
+            
 
 
     def gradio_model(message, type, context:str=None):
@@ -104,5 +102,3 @@ class Model:
 
         except Exception as e:
             logging.info(f"Error in generating text-to-text model output from Model class")
-            raise CustomException(e, sys)
-        
