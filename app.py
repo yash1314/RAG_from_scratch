@@ -11,8 +11,6 @@ from src.model_components.models import Model
 from src.exception import CustomException
 from src.logger import logging
 
-
-
 st.set_page_config(page_title="Chat with PDF and retrieve document", page_icon="📚", layout="wide", 
                    initial_sidebar_state="expanded")
 
@@ -20,6 +18,7 @@ st.set_page_config(page_title="Chat with PDF and retrieve document", page_icon="
 # bot and user chat alignment
 with open ('design.css') as source:
     st.markdown(f"<style>{source.read()}</style>",unsafe_allow_html=True)
+
 
 st.markdown('<style>div.block-container{padding-top:0.4rem;}</style>', unsafe_allow_html=True)
 st.header("*Your :violet[Document], Your :violet[Chat]* 💬 !")

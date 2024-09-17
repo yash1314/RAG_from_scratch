@@ -44,7 +44,7 @@ class Model:
                 return result[1][0][-1]
             
             elif type=='summary':
-                result = client.predict(query = f"""Follow these rules:
+                result = client.predict(query = f"""**Instructions**:
         
                                                             1. **Review Context**: Carefully read the context provided.
                                                             2. **Conciseness**: Summarize clearly, focusing on the key points.
