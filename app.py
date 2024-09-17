@@ -12,7 +12,7 @@ from src.exception import CustomException
 from src.logger import logging
 
 st.set_page_config(page_title="Chat with PDF and retrieve document", page_icon="📚", layout="wide", 
-                   initial_sidebar_state="expanded")
+                   initial_sidebar_state="collapsed",)
 
 
 # bot and user chat alignment
@@ -30,40 +30,46 @@ with st.expander(label="📋 Tips & Guidance"):
         **:green[Enjoy exploring!]**
         """, unsafe_allow_html=True)
 
+
 # markdown to add Name and Profile links
 with st.sidebar:
     st.markdown('# Contact:')
-    st.markdown(":red[------------------------------------]")
+    st.markdown(":grey[------------------------------------]")
     st.subheader('Made by: Yash Keshari')
     st.markdown("### [Linkedin](https://www.linkedin.com/in/yash907/), [Github](https://github.com/yash1314)")
 
-# to handle file in stramlit file uploader function
-if "file_uploader_key" not in st.session_state:
-    st.session_state["file_uploader_key"] = 0
+
+# file submit and remove session state
+if "submit" not in st.session_state:
+        st.session_state.submit = [0]
+
 
 # User Input with data extration, transformation and saving the data.
-with _bottom.popover('Upload File'):  
-    with st.container():           
-        user_file = st.file_uploader(label=':blue[**Upload your PDF file!**]',
-                                                type= 'pdf', accept_multiple_files=False, key=st.session_state["file_uploader_key"])
-        upload_button = st.button('Upload_file', use_container_width=True)
-        if upload_button:
-            if user_file is not None:   
-                with st.spinner('Loading and transforming Data.'):
-                    time.sleep(0.2)
-                    file_handling(file = user_file)
-                    time.sleep(0.1)
-                    st.success('File transformed successfully!', icon="✅")
+with _bottom.popover("File section"):
+    with st.form("my_form"):
+        user_file = st.file_uploader('Enter you file.', accept_multiple_files=False, type='pdf')
+    
+        submitted = st.form_submit_button("Submit file", use_container_width=True)
+        remove = st.form_submit_button('Remove file', use_container_width=True)
+        
+        if submitted:
+            if user_file is not None:
+                    st.session_state.submit.insert(0, 1)
+                    with st.spinner('Submitting and transforming Data.'):
+                        time.sleep(0.5)
+                        file_handling(file = user_file)
+                        time.sleep(0.5)
+                        st.success('File submitted & transformed successfully!', icon="✅")
             else:
                 st.error('Upload file before submitting.')
 
-        delete_button = st.button('Delete file', use_container_width=True)
-        if delete_button:
+        if remove:
             if user_file is not None:
+                st.session_state.submit.insert(0, 0)
+                time.sleep(0.5) 
                 DataFile.remove_file(folder_name = 'artifact')
-                st.success(f"File {user_file.name} deleted successfully", icon="✅")
-                st.session_state["file_uploader_key"] += 1
-                st.rerun()
+                time.sleep(0.5)
+                st.success("File removed successfully", icon = "✅")
             else:
                 try:
                     DataFile.remove_file(folder_name = 'artifact')
@@ -80,8 +86,45 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
+
 # Chat elements 
-if not user_file:       #If user doen't upload any file then the model talks casually.
+if st.session_state.submit[0] == 1:       #When user uploads pdf file, then the bot can only be used for QA task
+    
+    if prompt := st.chat_input("Talk to your PDF"):     
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        with st.chat_message("user"):
+            st.markdown(prompt)
+
+        with st.chat_message("assistant"):
+            try:
+                with st.spinner(" "):
+                    start_time = time.monotonic()
+                    simm_data = Similarity_Search.similarity_compute(user_query=prompt, file_read_path="artifact/data/ext_data.csv")
+                    
+                    if simm_data == None:
+                        res = Model.gradio_model(message = prompt, type = "qa")
+                        response = st.write_stream(stream_output(res))
+                        with st.expander("Click to see context data from PDF"):
+                            st.write('No Data Available or Error in Data parsing from document')
+                    else:
+                        res = Model.gradio_model(message = prompt, type = "summary", context=simm_data)
+                        response = st.write_stream(stream_output(res))
+                        
+                        processed_time = round(time.monotonic() - start_time, ndigits=2)
+                        with st.expander("Click to see context data from PDF"):
+                            st.write(simm_data)
+                        st.markdown(f'<div style="text-align: right;">Processed time: {processed_time} seconds</div>',
+                                unsafe_allow_html=True)
+                        
+            except Exception as e:
+                logging.info(f"Error in generating summary response.")
+                res = 'Error in generating summary response'
+                    
+        st.session_state.messages.append({"role": "assistant", "content": res})
+
+
+else: #If user doen't upload any file then the model talks casually.
+    
     if prompt := st.chat_input("Talk to a Chatbot"):
         
         st.session_state.messages.append({"role": "user", "content": prompt})
@@ -103,36 +146,4 @@ if not user_file:       #If user doen't upload any file then the model talks cas
             logging.info(f"Error in generating casual response.")
             res = 'Error in generating casual response'
 
-        st.session_state.messages.append({"role": "assistant", "content": res})
-
-else:
-    if prompt := st.chat_input("Talk to your PDF"):     #When user uploads pdf file, then the bot can only be used for QA task
-
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
-
-        with st.chat_message("assistant"):
-            try:
-                with st.spinner(" "):
-                    start_time = time.monotonic()
-                    simm_data = Similarity_Search.similarity_compute(user_query=prompt, file_read_path="artifact/data/ext_data.csv")
-                    
-                    if simm_data == None:
-                        res = Model.gradio_model(message = prompt, type = "qa")
-                        response = st.write_stream(stream_output(res))
-                    else:
-                        res = Model.gradio_model(message = prompt, type = "summary", context=simm_data)
-                        response = st.write_stream(stream_output(res))
-                        
-                        processed_time = round(time.monotonic() - start_time, ndigits=2)
-                        with st.expander("Click to see context data from PDF"):
-                            st.write(simm_data)
-                        st.markdown(f'<div style="text-align: right;">Processed time: {processed_time} seconds</div>',
-                                unsafe_allow_html=True)
-                        
-            except Exception as e:
-                logging.info(f"Error in generating summary response.")
-                res = 'Error in generating summary response'
-                    
         st.session_state.messages.append({"role": "assistant", "content": res})
