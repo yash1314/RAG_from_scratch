@@ -105,7 +105,7 @@ if st.session_state.submit[0] == 1:       #When user uploads pdf file, then the 
                         res = Model.gradio_model(message = prompt, type = "qa")
                         response = st.write_stream(stream_output(res))
                         with st.expander("Click to see context data from PDF"):
-                            st.write('No Data Available or Error in Data parsing from document')
+                            st.write('No Data Available from document')
                     else:
                         res = Model.gradio_model(message = prompt, type = "summary", context=simm_data)
                         response = st.write_stream(stream_output(res))
