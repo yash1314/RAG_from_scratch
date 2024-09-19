@@ -33,9 +33,9 @@ class Model:
             logging.info(f"Error in loading text-to-text model.")
             
 
-
+    @staticmethod
     def gradio_model(message, type, context:str=None):
-        client = Client("Qwen/Qwen2.5-0.5B-Instruct")
+        client = Client("Qwen/Qwen2.5-72B-Instruct")
         try:
             if type == 'qa':
                 result = client.predict(query = message, history= [], 

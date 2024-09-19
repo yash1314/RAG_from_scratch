@@ -20,8 +20,8 @@ with open ('design.css') as source:
     st.markdown(f"<style>{source.read()}</style>",unsafe_allow_html=True)
 
 
-st.markdown('<style>div.block-container{padding-top:0.4rem;}</style>', unsafe_allow_html=True)
-st.header("*Your :violet[Document], Your :violet[Chat]* 💬 !")
+st.markdown('<style>div.block-container{padding-top:0.7rem;}</style>', unsafe_allow_html=True)
+st.header("*Your:violet[Document], Your:orange[Chat]* 💬 !")
 
 with st.expander(label="📋 Tips & Guidance"):
     st.markdown("""
@@ -56,9 +56,9 @@ with _bottom.popover("File section"):
             if user_file is not None:
                     st.session_state.submit.insert(0, 1)
                     with st.spinner('Submitting and transforming Data.'):
-                        time.sleep(0.5)
+                        time.sleep(0.3)
                         file_handling(file = user_file)
-                        time.sleep(0.5)
+                        time.sleep(0.3)
                         st.success('File submitted & transformed successfully!', icon="✅")
             else:
                 st.error('Upload file before submitting.')
@@ -66,9 +66,9 @@ with _bottom.popover("File section"):
         if remove:
             if user_file is not None:
                 st.session_state.submit.insert(0, 0)
-                time.sleep(0.5) 
+                time.sleep(0.3) 
                 DataFile.remove_file(folder_name = 'artifact')
-                time.sleep(0.5)
+                time.sleep(0.3)
                 st.success("File removed successfully", icon = "✅")
             else:
                 try:
