@@ -1,6 +1,2 @@
 [server]
 maxUploadSize = 10
-
-[theme]
-backgroundColor="#f7f9f9"
-font="sans serif"
