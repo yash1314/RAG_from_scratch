@@ -78,8 +78,8 @@ with _bottom.popover("File section"):
                     st.error(f'Upload file before deleting.')
 
 # images
-bot_img = "https://raw.githubusercontent.com/yash1314/Chatbot_streamlit/refs/heads/main/resources/chatbot.png"
-user_img = "https://raw.githubusercontent.com/yash1314/Chatbot_streamlit/refs/heads/main/resources/man.png"
+bot_img = "https://raw.githubusercontent.com/yash1314/Chatbot_streamlit/refs/heads/main/artifact/chatbot.png"
+user_img = "https://raw.githubusercontent.com/yash1314/Chatbot_streamlit/refs/heads/main/artifact/man.png"
 
 # initializing message history 
 if "messages" not in st.session_state:
@@ -103,8 +103,9 @@ if st.session_state.submit[0] == 1:       #When user uploads pdf file, then the 
             st.markdown(prompt)
 
         with st.chat_message("assistant", avatar=bot_img):
+            
             try:
-                with st.spinner(" "):
+                with st.spinner("Thinking..."):
                     start_time = time.monotonic()
                     simm_data = Similarity_Search.similarity_compute(user_query=prompt, file_read_path="artifact/data/ext_data.csv")
                     
@@ -121,8 +122,7 @@ if st.session_state.submit[0] == 1:       #When user uploads pdf file, then the 
                 processed_time = round(time.monotonic() - start_time, ndigits=2)
                 with st.expander("Click to see context data from PDF"):
                     st.write(simm_data)
-                st.markdown(f'<div style="text-align: right;">Processed time: {processed_time} seconds</div>',
-                        unsafe_allow_html=True)
+                st.markdown(f'<div style="text-align: right;">Processed time: {processed_time} seconds</div>', unsafe_allow_html=True)
                         
             except Exception as e:
                 logging.info(f"Error in generating summary response.")
@@ -133,7 +133,7 @@ if st.session_state.submit[0] == 1:       #When user uploads pdf file, then the 
 
 else: #If user doen't upload any file then the model talks casually.
     
-    if prompt := st.chat_input("Talk to a Chatbot"):
+    if prompt := st.chat_input("Chat with bot"):
         
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
@@ -143,13 +143,13 @@ else: #If user doen't upload any file then the model talks casually.
             with st.chat_message("assistant"):
                 with st.spinner(" "):
                     start_time = time.monotonic()
-
                     res = Model.gradio_model(message = prompt, type = "qa")    
-                    response = st.write_stream(stream_output(res))
-                    
-                    processed_time = round(time.monotonic() - start_time, ndigits=2)
-                    st.markdown(f'<div style="text-align: right;">Processed time: {processed_time} seconds</div>',
-                                unsafe_allow_html=True)
+                
+                response = st.write_stream(stream_output(res))
+                
+                processed_time = round(time.monotonic() - start_time, ndigits=2)
+                st.markdown(f'<div style="text-align: right;">Processed time: {processed_time} seconds</div>',
+                            unsafe_allow_html=True)
         except Exception as e:
             logging.info(f"Error in generating casual response.")
             res = 'Error in generating casual response'
