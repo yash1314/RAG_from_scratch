@@ -136,11 +136,11 @@ else: #If user doen't upload any file then the model talks casually.
     if prompt := st.chat_input("Chat with bot"):
         
         st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
+        with st.chat_message("user", avatar=user_img):
             st.markdown(prompt)
 
         try:
-            with st.chat_message("assistant"):
+            with st.chat_message("assistant", avatar=user_img):
                 with st.spinner(" "):
                     start_time = time.monotonic()
                     res = Model.gradio_model(message = prompt, type = "qa")    
