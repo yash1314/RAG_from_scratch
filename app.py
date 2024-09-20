@@ -79,7 +79,7 @@ with _bottom.popover("File section"):
 
 # images
 bot_img = "https://raw.githubusercontent.com/yash1314/Chatbot_streamlit/refs/heads/main/artifact/chatbot.png"
-user_img = "https://raw.githubusercontent.com/yash1314/Chatbot_streamlit/refs/heads/main/artifact/man.png"
+user_img = "https://raw.githubusercontent.com/yash1314/Chatbot_streamlit/refs/heads/main/artifact/woman.png"
 
 # initializing message history 
 if "messages" not in st.session_state:
@@ -140,7 +140,7 @@ else: #If user doen't upload any file then the model talks casually.
             st.markdown(prompt)
 
         try:
-            with st.chat_message("assistant", avatar=user_img):
+            with st.chat_message("assistant", avatar=bot_img):
                 with st.spinner(" "):
                     start_time = time.monotonic()
                     res = Model.gradio_model(message = prompt, type = "qa")    
