@@ -77,14 +77,21 @@ with _bottom.popover("File section"):
                 except Exception as e:
                     st.error(f'Upload file before deleting.')
 
+# images
+bot_img = "https://raw.githubusercontent.com/yash1314/Chatbot_streamlit/refs/heads/main/resources/chatbot.png"
+user_img = "https://raw.githubusercontent.com/yash1314/Chatbot_streamlit/refs/heads/main/resources/man.png"
 
-# initializing chat history 
+# initializing message history 
 if "messages" not in st.session_state:
         st.session_state.messages = []
 
 for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+    if message['role'] == 'user':
+        with st.chat_message(message["role"], avatar=user_img):
+            st.markdown(message["content"])
+    elif message['role'] == 'assistant':
+        with st.chat_message(message["role"], avatar=bot_img):
+            st.markdown(message["content"])
 
 
 # Chat elements 
@@ -92,10 +99,10 @@ if st.session_state.submit[0] == 1:       #When user uploads pdf file, then the 
     
     if prompt := st.chat_input("Talk to your PDF"):     
         st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
+        with st.chat_message("user", avatar=user_img):
             st.markdown(prompt)
 
-        with st.chat_message("assistant"):
+        with st.chat_message("assistant", avatar=bot_img):
             try:
                 with st.spinner(" "):
                     start_time = time.monotonic()
@@ -105,16 +112,17 @@ if st.session_state.submit[0] == 1:       #When user uploads pdf file, then the 
                         res = Model.gradio_model(message = prompt, type = "qa")
                         response = st.write_stream(stream_output(res))
                         with st.expander("Click to see context data from PDF"):
-                            st.write('No Data Available from document')
+                            st.write('No data available from document, we are working to fix it.')
                     else:
                         res = Model.gradio_model(message = prompt, type = "summary", context=simm_data)
-                        response = st.write_stream(stream_output(res))
-                        
-                        processed_time = round(time.monotonic() - start_time, ndigits=2)
-                        with st.expander("Click to see context data from PDF"):
-                            st.write(simm_data)
-                        st.markdown(f'<div style="text-align: right;">Processed time: {processed_time} seconds</div>',
-                                unsafe_allow_html=True)
+                
+                response = st.write_stream(stream_output(res))
+                
+                processed_time = round(time.monotonic() - start_time, ndigits=2)
+                with st.expander("Click to see context data from PDF"):
+                    st.write(simm_data)
+                st.markdown(f'<div style="text-align: right;">Processed time: {processed_time} seconds</div>',
+                        unsafe_allow_html=True)
                         
             except Exception as e:
                 logging.info(f"Error in generating summary response.")
