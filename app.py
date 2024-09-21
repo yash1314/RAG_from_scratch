@@ -25,22 +25,22 @@ st.header("*Your:violet[Document], Your:orange[Chat]* 💬 !")
 
 with st.expander(label="📋 Tips & Guidance"):
     st.markdown("""
-        **I appreciate and welcome your engagement with this application! Upload your PDF using the pop-up button (on the bottom), ask a question, and get summaries based on your query.**<br>
+        **Thank you for engaging with this application! We invite you to upload your PDF using the button at the bottom. Ask a question, and receive insightful summaries tailored to your query. We look forward to assisting you!**<br>
 
         **:green[Enjoy exploring!]**
         """, unsafe_allow_html=True)
 
 
 # markdown to add Name and Profile links
-with st.sidebar:
-    st.subheader(":grey[Developer Info]:")
-    with st.container(border=True):
-        st.markdown("<h2 style='text-align: center; color:#f08080;'>YASH KESAHRI</h3>", unsafe_allow_html=True)
-        col1, col2 = st.columns(2)
-        with col1:
-            st.link_button("**Linkedin**", "https://www.linkedin.com/in/yash907")
-        with col2:
-            st.link_button("**Github**", "https://github.com/yash1314")
+# with st.sidebar:
+#     st.subheader(":grey[Developer Info]:")
+#     with st.container(border=True):
+#         st.markdown("<h2 style='text-align: center; color:#f08080;'>YASH KESAHRI</h3>", unsafe_allow_html=True)
+#         col1, col2 = st.columns(2)
+#         with col1:
+#             st.link_button("**Linkedin**", "https://www.linkedin.com/in/yash907")
+#         with col2:
+#             st.link_button("**Github**", "https://github.com/yash1314")
 
 # file submit and remove session state
 if "submit" not in st.session_state:
@@ -88,9 +88,20 @@ with _bottom.popover("File section"):
 bot_img = "https://raw.githubusercontent.com/yash1314/Chatbot_streamlit/refs/heads/main/artifact/chatbot.png"
 user_img = "https://raw.githubusercontent.com/yash1314/Chatbot_streamlit/refs/heads/main/artifact/woman.png"
 
+
+# addding space
+st.markdown(
+    "<div style='text-align: center;'>"
+    "<a href='https://www.linkedin.com/in/yash907'>LinkedIn</a> | <a href='https://github.com/yash1314'>GitHub</a> | Made with ❤️‍🔥 by Yash Keshari"
+    "</div>",
+    unsafe_allow_html=True)
+st.markdown(" ")
+
 # initializing message history 
 if "messages" not in st.session_state:
-        st.session_state.messages = []
+        st.session_state.messages = [{'role':"assistant",
+                                      "content": 
+"Hello! I'm an Smart AI just a click away, ready to assist you. Ask me about anything for quick answers, and I can also summarize your queries from uploaded documents."}]
 
 for message in st.session_state.messages:
     if message['role'] == 'user':
