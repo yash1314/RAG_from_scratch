@@ -12,7 +12,7 @@ from src.exception import CustomException
 from src.logger import logging
 
 st.set_page_config(page_title="Chat with PDF and retrieve document", page_icon="📚", layout="wide", 
-                   initial_sidebar_state="collapsed",)
+                   initial_sidebar_state="expanded",)
 
 
 # bot and user chat alignment
@@ -25,7 +25,7 @@ st.header("*Your:violet[Document], Your:orange[Chat]* 💬 !")
 
 with st.expander(label="📋 Tips & Guidance"):
     st.markdown("""
-        **I appreciate and welcome your engagement with this application! Upload your PDF using the side section (arrow on top left), ask a question, and get summaries based on your query.**<br>
+        **I appreciate and welcome your engagement with this application! Upload your PDF using the pop-up button (on the bottom), ask a question, and get summaries based on your query.**<br>
 
         **:green[Enjoy exploring!]**
         """, unsafe_allow_html=True)
@@ -33,49 +33,56 @@ with st.expander(label="📋 Tips & Guidance"):
 
 # markdown to add Name and Profile links
 with st.sidebar:
-    st.markdown('# Contact:')
-    st.markdown(":grey[------------------------------------]")
-    st.subheader('Made by: Yash Keshari')
-    st.markdown("### [Linkedin](https://www.linkedin.com/in/yash907/), [Github](https://github.com/yash1314)")
-
+    st.subheader(":grey[Developer Info]:")
+    with st.container(border=True):
+        st.markdown("<h2 style='text-align: center; color:#f08080;'>YASH KESAHRI</h3>", unsafe_allow_html=True)
+        col1, col2 = st.columns(2)
+        with col1:
+            st.link_button("**Linkedin**", "https://www.linkedin.com/in/yash907")
+        with col2:
+            st.link_button("**Github**", "https://github.com/yash1314")
 
 # file submit and remove session state
 if "submit" not in st.session_state:
         st.session_state.submit = [0]
 
 
-# User Input with data extration, transformation and saving the data.
+# Taking User Input file and performing data extration, transformation and saving the data. Also handle file upload and removal 
 with _bottom.popover("File section"):
     with st.form("my_form"):
         user_file = st.file_uploader('Enter you file.', accept_multiple_files=False, type='pdf')
-    
-        submitted = st.form_submit_button("Submit file", use_container_width=True)
-        remove = st.form_submit_button('Remove file', use_container_width=True)
-        
-        if submitted:
-            if user_file is not None:
-                    st.session_state.submit.insert(0, 1)
-                    with st.spinner('Submitting and transforming Data.'):
-                        time.sleep(0.3)
-                        file_handling(file = user_file)
-                        time.sleep(0.3)
-                        st.success('File submitted & transformed successfully!', icon="✅")
-            else:
-                st.error('Upload file before submitting.')
 
-        if remove:
-            if user_file is not None:
-                st.session_state.submit.insert(0, 0)
-                time.sleep(0.3) 
-                DataFile.remove_file(folder_name = 'artifact')
-                time.sleep(0.3)
-                st.success("File removed successfully", icon = "✅")
-            else:
-                try:
+        col3, col4 = st.columns(2)
+
+        with col3:
+            submitted = st.form_submit_button("Submit file", use_container_width=True)
+            if submitted:
+                if user_file is not None:
+                        st.session_state.submit.insert(0, 1)
+                        with st.spinner('Submitting and transforming Data.'):
+                            time.sleep(0.3)
+                            file_handling(file = user_file)
+                            time.sleep(0.3)
+                            st.success('File submitted & transformed successfully!', icon="✅")
+                else:
+                    st.error('Upload file before submitting.')
+
+        with col4:
+            remove = st.form_submit_button('Remove file', use_container_width=True)
+            if remove:
+                if user_file is not None:
+                    st.session_state.submit.insert(0, 0)
+                    time.sleep(0.3) 
                     DataFile.remove_file(folder_name = 'artifact')
-                    st.success(f"File '{user_file.name}' deleted successfully")
-                except Exception as e:
-                    st.error(f'Upload file before deleting.')
+                    time.sleep(0.3)
+                    st.success("File removed successfully", icon = "✅")
+                else:
+                    try:
+                        DataFile.remove_file(folder_name = 'artifact')
+                        st.success(f"File '{user_file.name}' deleted successfully")
+                    except Exception as e:
+                        st.error(f'Upload file before deleting.')
+                        st.empty()
 
 # images
 bot_img = "https://raw.githubusercontent.com/yash1314/Chatbot_streamlit/refs/heads/main/artifact/chatbot.png"
@@ -103,7 +110,7 @@ if st.session_state.submit[0] == 1:       #When user uploads pdf file, then the 
             st.markdown(prompt)
 
         with st.chat_message("assistant", avatar=bot_img):
-            
+            message_placeholder1 = st.empty()
             try:
                 with st.spinner("Thinking..."):
                     start_time = time.monotonic()
@@ -111,18 +118,17 @@ if st.session_state.submit[0] == 1:       #When user uploads pdf file, then the 
                     
                     if simm_data == None:
                         res = Model.gradio_model(message = prompt, type = "qa")
-                        response = st.write_stream(stream_output(res))
+                        message_placeholder1.write_stream(stream_output(res))
                         with st.expander("Click to see context data from PDF"):
                             st.write('No data available from document, we are working to fix it.')
                     else:
                         res = Model.gradio_model(message = prompt, type = "summary", context=simm_data)
-                
-                response = st.write_stream(stream_output(res))
-                
-                processed_time = round(time.monotonic() - start_time, ndigits=2)
+                message_placeholder1.write_stream(stream_output(res))
+                latency = round(time.monotonic() - start_time, ndigits=2)
+
                 with st.expander("Click to see context data from PDF"):
                     st.write(simm_data)
-                st.markdown(f'<div style="text-align: right;">Processed time: {processed_time} seconds</div>', unsafe_allow_html=True)
+                st.markdown(f'<div style="text-align: right;">Latency: {latency} seconds</div>', unsafe_allow_html=True)
                         
             except Exception as e:
                 logging.info(f"Error in generating summary response.")
@@ -141,14 +147,15 @@ else: #If user doen't upload any file then the model talks casually.
 
         try:
             with st.chat_message("assistant", avatar=bot_img):
+                message_placeholder2 = st.empty()
                 with st.spinner(" "):
                     start_time = time.monotonic()
                     res = Model.gradio_model(message = prompt, type = "qa")    
                 
-                response = st.write_stream(stream_output(res))
+                message_placeholder2.write_stream(stream_output(res))
                 
-                processed_time = round(time.monotonic() - start_time, ndigits=2)
-                st.markdown(f'<div style="text-align: right;">Processed time: {processed_time} seconds</div>',
+                latency2 = round(time.monotonic() - start_time, ndigits=2)
+                st.markdown(f'<div style="text-align: right;">Latency: {latency2} seconds</div>',
                             unsafe_allow_html=True)
         except Exception as e:
             logging.info(f"Error in generating casual response.")
