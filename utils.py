@@ -7,9 +7,10 @@ from better_profanity import profanity
 
 #loading json lottie animation file
 def json_load(path):
-    url = requests.get(path)
-    return url.json()
-
+    with open(path, "r") as file:
+        url = json.load(path)
+        return url
+    
 # streaming output
 def stream_output(output):
     """Output answer in stream of words."""
