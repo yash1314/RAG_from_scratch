@@ -1,7 +1,8 @@
 import streamlit as st
 from streamlit import _bottom
+from streamlit_lottie import st_lottie_spinner
 import time, sys
-from utils import stream_output
+from utils import stream_output, json_load
 
 from src.pipelines.main_pipe import file_handling
 from src.data_components.data_ingestion import DataFile
@@ -84,10 +85,11 @@ with _bottom.popover("File section"):
                         st.error(f'Upload file before deleting.')
                         st.empty()
 
-# images
+# images and lottie animation
 bot_img = "https://raw.githubusercontent.com/yash1314/Chatbot_streamlit/refs/heads/main/artifact/chatbot.png"
 user_img = "https://raw.githubusercontent.com/yash1314/Chatbot_streamlit/refs/heads/main/artifact/woman.png"
-
+lottie_url_casual = json_load("resources\Animation_1726988919091.json")
+lottie_url_qa = json_load("resources\Animation_1726989223814.json")
 
 # addding space
 st.markdown(
@@ -123,7 +125,7 @@ if st.session_state.submit[0] == 1:       #When user uploads pdf file, then the 
         with st.chat_message("assistant", avatar=bot_img):
             message_placeholder1 = st.empty()
             try:
-                with st.spinner("Thinking..."):
+                with st_lottie_spinner(lottie_url_qa, height=35, width=60,speed=5, loop=True):
                     start_time = time.monotonic()
                     simm_data = Similarity_Search.similarity_compute(user_query=prompt, file_read_path="artifact/data/ext_data.csv")
                     
@@ -159,7 +161,7 @@ else: #If user doen't upload any file then the model talks casually.
         try:
             with st.chat_message("assistant", avatar=bot_img):
                 message_placeholder2 = st.empty()
-                with st.spinner(" "):
+                with st_lottie_spinner(lottie_url_casual, height=35, width=60,speed=5, loop=True,):
                     start_time = time.monotonic()
                     res = Model.gradio_model(message = prompt, type = "qa")    
                 
