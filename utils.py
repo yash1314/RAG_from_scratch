@@ -1,16 +1,11 @@
 import streamlit as st
-import re, random, time, json, requests
+import re, random, time
 from src.data_components.data_ingestion import DataFile
 from src.model_components.models import Model
 from better_profanity import profanity
 
 
-#loading json lottie animation file
-def json_load(path):
-    with open(path, "r") as file:
-        url = json.load(path)
-        return url
-    
+
 # streaming output
 def stream_output(output):
     """Output answer in stream of words."""

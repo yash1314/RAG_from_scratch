@@ -2,7 +2,7 @@ import streamlit as st
 from streamlit import _bottom
 from streamlit_lottie import st_lottie_spinner
 import time, sys
-from utils import stream_output, json_load
+from utils import stream_output
 from resources.animation import animations 
 
 from src.pipelines.main_pipe import file_handling
@@ -89,8 +89,8 @@ with _bottom.popover("File section"):
 # images and lottie animation
 bot_img = "https://raw.githubusercontent.com/yash1314/Chatbot_streamlit/refs/heads/main/artifact/chatbot.png"
 user_img = "https://raw.githubusercontent.com/yash1314/Chatbot_streamlit/refs/heads/main/artifact/woman.png"
-lottie_url_casual = json_load("\resources\Animation_1726988919091.json")
-lottie_url_qa = json_load("\resources\Animation_1726989223814.json")
+lottie_url_casual = animations.casual_animation()
+lottie_url_qa = animations.qa_animation()
 
 # addding space
 st.markdown(
