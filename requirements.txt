@@ -7,3 +7,4 @@ transformers
 better-profanity
 pymupdf
 gradio-client
+streamlit-lottie
