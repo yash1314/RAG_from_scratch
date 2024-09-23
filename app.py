@@ -173,6 +173,6 @@ else: #If user doen't upload any file then the model talks casually.
                             unsafe_allow_html=True)
         except Exception as e:
             logging.info(f"Error in generating casual response.")
-            res = 'Error in generating casual response'
+            res = "Internal Error - We're working hard to fix this as soon as possible!"
 
         st.session_state.messages.append({"role": "assistant", "content": res})
