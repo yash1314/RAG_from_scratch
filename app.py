@@ -174,6 +174,6 @@ else: #If user doen't upload any file then the model talks casually.
         except Exception as e:
             logging.info(f"Error in generating casual response.")
             res = "Internal Error - We're working hard to fix this as soon as possible!"
-            st.write_stream(stream_output(res))
+            message_placeholder2.write_stream(stream_output(res))
 
         st.session_state.messages.append({"role": "assistant", "content": res})
