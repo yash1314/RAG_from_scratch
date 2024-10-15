@@ -33,17 +33,6 @@ with st.expander(label="📋 Tips & Guidance"):
         """, unsafe_allow_html=True)
 
 
-# markdown to add Name and Profile links
-# with st.sidebar:
-#     st.subheader(":grey[Developer Info]:")
-#     with st.container(border=True):
-#         st.markdown("<h2 style='text-align: center; color:#f08080;'>YASH KESAHRI</h3>", unsafe_allow_html=True)
-#         col1, col2 = st.columns(2)
-#         with col1:
-#             st.link_button("**Linkedin**", "https://www.linkedin.com/in/yash907")
-#         with col2:
-#             st.link_button("**Github**", "https://github.com/yash1314")
-
 # file submit and remove session state
 if "submit" not in st.session_state:
         st.session_state.submit = [0]
@@ -92,13 +81,15 @@ user_img = "https://raw.githubusercontent.com/yash1314/Chatbot_streamlit/refs/he
 lottie_url_casual = animations.casual_animation()
 lottie_url_qa = animations.qa_animation()
 
+
 # addding space
 st.markdown(
     "<div style='text-align: center;'>"
-    "<a href='https://www.linkedin.com/in/yash907'>LinkedIn</a> | <a href='https://github.com/yash1314'>GitHub</a> | Made with ❤️‍🔥 by Yash Keshari"
+    "| Made with ❤️‍🔥 by Yash Keshari |"
     "</div>",
     unsafe_allow_html=True)
 st.markdown(" ")
+
 
 # initializing message history 
 if "messages" not in st.session_state:
