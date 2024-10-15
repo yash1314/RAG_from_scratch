@@ -25,6 +25,7 @@ with open ('design.css') as source:
 st.markdown('<style>div.block-container{padding-top:0.7rem;}</style>', unsafe_allow_html=True)
 st.header("*Your:violet[Document], Your:orange[Chat]* 💬 !")
 
+
 with st.expander(label="📋 Tips & Guidance"):
     st.markdown("""
         **Thank you for engaging with this application! We invite you to upload your PDF using the button at the bottom. Ask a question, and receive insightful summaries tailored to your query. We look forward to assisting you!**<br>

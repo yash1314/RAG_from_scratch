@@ -39,7 +39,7 @@ class Model:
         try:
             if type == 'qa':
                 result = client.predict(query = message, history= [], 
-                                        system = "**Instructions:**\n1. Provide clear, accurate answers based on the context, including previous interactions and queries.\n2. Use the same language as the question.\n3. Be concise but, shortish answers are better. Never omit details.\n4. Incorporate information from previous questions and answers to provide a coherent response.\n5. If you cannot provide an answer based on the context, acknowledge this politely and state that you do not have enough information.\n6. Ensure all responses are suitable for all audiences and avoid adult or explicit content.",
+                                        system = "**Instructions**: Provide clear, accurate, and concise answers based on context, using the same language as the question, incorporating past queries, acknowledging missing info politely, and ensuring responses are suitable for all audiences. Also add your opinion on the matter. ", 
                                         api_name = "/model_chat")
                 return result[1][0][-1]
             
