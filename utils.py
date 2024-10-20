@@ -59,3 +59,7 @@ def clear_session_embedded_data():
     """Clear document embedding data"""
     if "embedded_data" in st.session_state:
         del st.session_state["embedded_data"]
+
+@st.dialog(title="Welcome to ChatNext!", width="large")
+def app_info(data):
+    st.markdown(data)

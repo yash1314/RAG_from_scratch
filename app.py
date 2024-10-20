@@ -23,15 +23,15 @@ with open ('design.css') as source:
 
 
 st.markdown('<style>div.block-container{padding-top:0.7rem;}</style>', unsafe_allow_html=True)
-st.header("*Your:violet[Document], Your:orange[Chat]* 💬 !")
+st.header("*Your:violet[Document], Your:orange[Chat]* 💬 !", divider='grey')
 
 
-with st.expander(label="📋 Tips & Guidance"):
-    st.markdown("""
-        **Thank you for engaging with this application! We invite you to upload your PDF using the button at the bottom. Ask a question, and receive insightful summaries tailored to your query. We look forward to assisting you!**<br>
+# with st.expander(label="📋 Tips & Guidance"):
+st.markdown("""
+    **Thank you for engaging with this application! We invite you to upload your PDF using the button at the bottom. Ask a question, and receive insightful summaries tailored to your query. We look forward to assisting you!**<br>
 
-        **:green[Enjoy exploring!]**
-        """, unsafe_allow_html=True)
+    **:green[Enjoy exploring!]**
+    """, unsafe_allow_html=True)
 
 
 # file submit and remove session state
@@ -108,7 +108,7 @@ for message in st.session_state.messages:
 
 
 # Chat elements 
-if st.session_state.submit[0] == 1:       #When user uploads pdf file, then the bot can only be used for QA task
+if st.session_state.submit[0] == 1:       # When user uploads pdf file, then the bot can only be used for QA task
     
     if prompt := st.chat_input("Talk to your PDF"):     
         st.session_state.messages.append({"role": "user", "content": prompt})
@@ -118,21 +118,24 @@ if st.session_state.submit[0] == 1:       #When user uploads pdf file, then the 
         with st.chat_message("assistant", avatar=bot_img):
             message_placeholder1 = st.empty()
             try:
-                with st_lottie_spinner(lottie_url_qa, height=35, width=60,speed=5, loop=True):
+                with st_lottie_spinner(lottie_url_qa, height=35, width=60,speed=5):
                     start_time = time.monotonic()
                     simm_data = Similarity_Search.similarity_compute(user_query=prompt, file_read_path="artifact/data/ext_data.csv")
                     
                     if simm_data == None:
                         res = Model.gradio_model(message = prompt, type = "qa")
                         message_placeholder1.write_stream(stream_output(res))
-                        with st.expander("Click to see context data from PDF"):
-                            st.write('No data available from document, we are working to fix it.')
+                        with st.popover("Context Data"):
+                        # with st.expander("Click to see context data from PDF"):
+                            st.write('Unfortunately, we could not find the relevant data')
                     else:
                         res = Model.gradio_model(message = prompt, type = "summary", context=simm_data)
+
                 message_placeholder1.write_stream(stream_output(res))
                 latency = round(time.monotonic() - start_time, ndigits=2)
 
-                with st.expander("Click to see context data from PDF"):
+                # with st.expander("Click to see context data from PDF"):
+                with st.popover("Context Data"):
                     st.write(simm_data)
                 st.markdown(f'<div style="text-align: right;">Latency: {latency} seconds</div>', unsafe_allow_html=True)
                         
