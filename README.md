@@ -63,19 +63,25 @@ RAG_P/
 1. **Clone the repository**:
    ```bash
    git clone <repo_url>
-   cd RAG_P```
+   cd RAG_P
 2. **Create a virtual environment:**
-  ```python3 -m venv .venv
+```
+  python3 -m venv .venv
   source .venv/bin/activate  # For Linux/MacOS
-  .venv\Scripts\activate    # For Windows```
+  .venv\Scripts\activate    # For Windows
+```
 
 4. **Install the required packages:**
-   ```pip install -r requirements.txt```
+```
+pip install -r requirements.txt
+```
 
-5. **Run the application:**
-   ```streamlit run app.py```
+6. **Run the application:**
+```
+streamlit run app.py
+```
 
-6. Interact with the chatbot: Upload documents, submit queries, and receive context-driven responses via the app's UI.
+8. Interact with the chatbot: Upload documents, submit queries, and receive context-driven responses via the app's UI.
 
 ## Technologies and Tools Used
 - Python: Core language for developing the application.
