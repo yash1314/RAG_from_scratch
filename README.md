@@ -11,27 +11,27 @@ This project implements a Retrieval-Augmented Generation (RAG) chatbot built fro
 - **Modular Code Design**: The project is structured for clarity, separation of concerns, and ease of maintenance.
 
 ## Project Structure
-RAG_P/ 
-├── .streamlit/ # Streamlit configuration 
-├── .venv/ # Virtual environment 
-├── extras/ # Extra files (if any) 
-├── logs/ # Logs for debugging 
-├── resources/ # Static resources such as CSS files 
-│ ├── animation.py # Animation utilities 
-├── src/ # Main source code 
-│ ├── data_components/ 
-│ │ ├── data_ingestion.py # File upload, processing, and ingestion 
-│ │ ├── data_similarity_search.py # Similarity search using cosine distance 
-│ │ ├── data_transform.py # Data transformation logic (chunking, embedding) 
-│ ├── model_components/ 
-│ │ ├── models.py # Embedding and model handling logic 
-│ ├── pipelines/ 
-│ │ ├── exception.py # Exception handling 
-│ │ ├── logger.py # Logging setup and management 
-├── app.py # Main Streamlit app entry point 
-├── design.css # Custom CSS for Streamlit design 
-├── requirements.txt # List of dependencies 
-├── utils.py # Utility functions for the app
+RAG_P/
+├── .streamlit/              # Streamlit configuration
+├── .venv/                   # Virtual environment
+├── extras/                  # Extra files (if any)
+├── logs/                    # Logs for debugging
+├── resources/               # Static resources such as CSS files
+│   ├── animation.py         # Animation utilities
+├── src/                     # Main source code
+│   ├── data_components/      # Components handling data operations
+│   │   ├── data_ingestion.py         # File upload, processing, and ingestion
+│   │   ├── data_similarity_search.py # Similarity search using cosine distance
+│   │   ├── data_transform.py         # Data transformation logic (chunking, embedding)
+│   ├── model_components/     # Components handling models
+│   │   ├── models.py                 # Embedding and model handling logic
+│   ├── pipelines/            # Pipelines and orchestration
+│   │   ├── exception.py              # Exception handling
+│   │   ├── logger.py                 # Logging setup and management
+├── app.py                   # Main Streamlit app entry point
+├── design.css               # Custom CSS for Streamlit design
+├── requirements.txt         # List of dependencies
+├── utils.py                 # Utility functions for the app
 
 
 ## Pipeline Overview
