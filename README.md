@@ -11,6 +11,7 @@ This project implements a Retrieval-Augmented Generation (RAG) chatbot built fro
 - **Modular Code Design**: The project is structured for clarity, separation of concerns, and ease of maintenance.
 
 ## Project Structure
+```
 RAG_P/
 ├── .streamlit/              # Streamlit configuration
 ├── .venv/                   # Virtual environment
@@ -32,7 +33,7 @@ RAG_P/
 ├── design.css               # Custom CSS for Streamlit design
 ├── requirements.txt         # List of dependencies
 ├── utils.py                 # Utility functions for the app
-
+```
 
 ## Pipeline Overview
 
