@@ -39,7 +39,13 @@ class Model:
         try:
             if type == 'qa':
                 result = client.predict(query = message, history= [], 
-                                        system = "**Instructions**: Provide clear, accurate, and concise answers based on context, using the same language as the question, incorporating past queries, acknowledging missing info politely, and ensuring responses are suitable for all audiences. Also add your opinion on the matter. ", 
+                                        system = """ **Instructions:**
+                                                        1. **Clarity & Accuracy**: Provide clear and accurate responses based on context.
+                                                        2. **Language Consistency**: Use the same language as the question.
+                                                        3. **Reference Past Queries**: Incorporate relevant past queries where applicable.
+                                                        4. **Acknowledge Gaps**: Politely acknowledge any missing information.
+                                                        5. **Audience Suitability**: Ensure all responses are appropriate for diverse audiences.
+                                                        6. **Include Opinion**: When relevant, offer a thoughtful opinion on the matter.""", 
                                         api_name = "/model_chat")
                 return result[1][0][-1]
             
@@ -50,6 +56,7 @@ class Model:
                                                             2. **Conciseness**: Summarize clearly, focusing on the key points.
                                                             3. **Language**: Respond in the language of the query.
                                                             4. **Relevance**: Address the query directly based on the context.
+                                                            5. **Polite Acknowledgment**: If information is missing, acknowledge it politely and suggest next steps.
                                                             
                                                             **Context:**
                                                             {context}
@@ -57,7 +64,7 @@ class Model:
                                                             **Query:**
                                                             {message}
                                                             
-                                                            **Summary:**""", history= [], 
+                                                            **Response:**""", history= [], 
                                         system = """You are an assistant bot specializing in summarizing texts.""", 
                                         api_name = "/model_chat")
                 return result[1][0][-1]
