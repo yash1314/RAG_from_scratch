@@ -1,10 +1,9 @@
-div.stChatMessage.st-emotion-cache-1c7y2kd.eeusbqq4 
+div.stChatMessage.st-emotion-cache-1c7y2kd.ea2tk8x0 
 {
     width: auto;
     display: flex;
     flex-direction: row-reverse;
-    align-items: stretch;
+    /* align-items: stretch; */
     /* justify-content: space-evenly; */
-    text-align: right;
+    text-align: end;
 }
-

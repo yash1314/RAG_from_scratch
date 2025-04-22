@@ -2,6 +2,7 @@ import streamlit as st
 from streamlit import _bottom
 from streamlit_lottie import st_lottie_spinner
 import time, sys
+import torch
 from utils import stream_output
 from resources.animation import animations 
 
@@ -13,23 +14,24 @@ from src.model_components.models import Model
 from src.exception import CustomException
 from src.logger import logging
 
-st.set_page_config(page_title="Chat with PDF and retrieve document", page_icon="📚", layout="wide", 
+torch.classes.__path__ = [] 
+
+st.set_page_config(page_title="Chat with Document", page_icon="📚", layout="centered", 
                    initial_sidebar_state="expanded",)
 
 
 # bot and user chat alignment
 with open ('design.css') as source:
-    st.markdown(f"<style>{source.read()}</style>",unsafe_allow_html=True)
+    st.markdown(f"<style>{source.read()}</style>", unsafe_allow_html=True)
 
 
 st.markdown('<style>div.block-container{padding-top:0.7rem;}</style>', unsafe_allow_html=True)
-st.header("*Your:violet[Document], Your:orange[Chat]* 💬 !", divider='grey')
+st.header("*:violet[Retrieval-Augmented Generation] :orange[Chat]*", divider='grey')
 
 
 # with st.expander(label="📋 Tips & Guidance"):
 st.markdown("""
-    **Thank you for engaging with this application! We invite you to upload your PDF using the button at the bottom. Ask a question, and receive insightful summaries tailored to your query. We look forward to assisting you!**<br>
-
+    **Thank you for engaging with this application! We invite you to upload your PDF, ask a question and receive insightful answers tailored to your query. Refrain from uploading Sensitive documents. We look forward to assisting you!**<br>
     **:green[Enjoy exploring!]**
     """, unsafe_allow_html=True)
 
@@ -96,7 +98,7 @@ st.markdown(" ")
 if "messages" not in st.session_state:
         st.session_state.messages = [{'role':"assistant",
                                       "content": 
-"Hello! I'm an Smart AI just a click away, ready to assist you. Ask me about anything for quick answers, and I can also summarize your queries from uploaded documents."}]
+"Hello! I'm an AI just a click away, ready to assist you. Ask me about anything for quick answers."}]
 
 for message in st.session_state.messages:
     if message['role'] == 'user':
@@ -157,7 +159,7 @@ else: #If user doen't upload any file then the model talks casually.
         try:
             with st.chat_message("assistant", avatar=bot_img):
                 message_placeholder2 = st.empty()
-                with st_lottie_spinner(lottie_url_casual, height=35, width=60,speed=5, loop=True,):
+                with st_lottie_spinner(lottie_url_casual, height=45, width=55, speed=2, loop=True,):
                     start_time = time.monotonic()
                     res = Model.gradio_model(message = prompt, type = "qa")    
                 

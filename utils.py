@@ -12,7 +12,7 @@ def stream_output(output):
     try: 
         for word in output.split(" "):
             yield word + " "
-            time.sleep(0.1)
+            time.sleep(0.05)
             
     except Exception as e:
             print(f"Error in output_stream: {str(e)}")  
@@ -40,12 +40,12 @@ def casual_responses(sentence):
             filtered_output = "Inappropriate output, therefore restricting the answer. Ask another question !"
             for word in filtered_output.split(" "):
                 yield word + " "
-                time.sleep(0.1)
+                time.sleep(0.05)
 
         else:
             for word in qa_model_output.split(" "):
                 yield word + " "
-                time.sleep(0.1)
+                time.sleep(0.05)
 
 
 # regular expression function
